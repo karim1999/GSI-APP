@@ -75,7 +75,7 @@ class SignIn extends Component {
 
     render() {
         return (
-            <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/background.jpg')}>
+            <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
                   <Image style={styles.logo} source={require('../../../images/LightenedLogo.png')} />
                   
                 <View style={styles.list}>

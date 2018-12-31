@@ -61,7 +61,7 @@ export default class ForgetPassword extends Component {
     render() {
         return (
             <Form>
-                <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/background.jpg')}>
+                <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
                     <Image 
                     source={require('../../../images/LightenedLogo.png')}
                      style={{height: 300, width: 300,alignSelf: 'center', }}
