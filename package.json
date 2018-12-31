@@ -15,6 +15,7 @@
     "react-native": "0.57.8",
     "react-native-calendars": "^1.21.0",
     "react-native-firebase": "^5.1.1",
+    "react-native-gesture-handler": "^1.0.12",
     "react-native-image-picker": "^0.27.2",
     "react-native-modal-datetime-picker": "^6.0.0",
     "react-native-multiple-select": "^0.4.4",
