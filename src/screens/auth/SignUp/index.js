@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground } from 'react-native';
-import { Form, Item, Button, Input, Toast} from 'native-base';
+import {Container, Content, Form, Item, Button, Input, Toast} from 'native-base';
 
 
 export default class SignUp extends Component {
@@ -38,6 +38,7 @@ export default class SignUp extends Component {
         return (
             <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
                   <Image style={styles.logo} source={require('../../../images/LightenedLogo.png')} />
+                  <Content>
                 <View style={styles.list}>
                     <Form>
                         <Item style={styles.margin}>
@@ -75,6 +76,7 @@ export default class SignUp extends Component {
                         </Button>
                     </Form>
                 </View>
+                </Content>
             </ImageBackground>
         );
     }
@@ -82,8 +84,8 @@ export default class SignUp extends Component {
 
 const styles = StyleSheet.create({
   logo:{
-    width: 300, 
-    height: 300, 
+    width: '50%', 
+    height: '50%', 
     justifyContent: 'center', 
     alignSelf: 'center'
   },

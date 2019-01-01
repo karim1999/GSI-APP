@@ -42,12 +42,30 @@ export default class SignUp2 extends Component {
             });
             this.props.navigation.navigate("SignIn");
         }).catch(error => {
-            let text= "Error";
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
+            if(error.response.data.msg.email[0]){
+                let text= error.response.data.msg.email[0];
+                Toast.show({
+                    text,
+                    type: 'danger',
+                    buttonText: 'Okay'
+                });
+            }else if(error.response.data.msg.phone[0]){
+                let text= error.response.data.msg.phone[0];
+                Toast.show({
+                    text,
+                    type: 'danger',
+                    buttonText: 'Okay'
+                });
+            }
+            else{
+                alert(error.json());
+                let text= "Internet connection";
+                Toast.show({
+                    text,
+                    type: 'danger',
+                    buttonText: 'Okay'
+                });
+            }
             this.setState({
                 isSignUp: false
             });
@@ -73,14 +91,14 @@ export default class SignUp2 extends Component {
                                 <Icon type="FontAwesome" name='male' />
                                 <Text style={styles.font}>Male</Text>
                                 <Radio style={{paddingRight: 20, paddingLeft: 8}}
-                                    selected={this.state.gender === 0}
-                                    onPress={(gender) => {this.setState({gender: 0})}}/>
+                                    selected={this.state.gender === 1}
+                                    onPress={(gender) => {this.setState({gender: 1})}}/>
 
                                 <Icon type="FontAwesome" name='female' />
                                 <Text style={styles.font}>Female</Text>
                                 <Radio style={{paddingLeft: 8}}
-                                    selected={this.state.gender === 1}
-                                    onPress={(gender) => {this.setState({gender: 1})}}
+                                    selected={this.state.gender === 2}
+                                    onPress={(gender) => {this.setState({gender: 2})}}
                                     />  
                             </View>
 
@@ -101,8 +119,8 @@ export default class SignUp2 extends Component {
 
 const styles = StyleSheet.create({
   logo:{
-    width: 400, 
-    height: 400, 
+    width: '70%', 
+    height: '70%', 
     justifyContent: 'center', 
     alignSelf: 'center'
   },

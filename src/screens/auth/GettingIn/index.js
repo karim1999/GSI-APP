@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
-import { ListItem, Left, Right, Icon,Button} from 'native-base';
+import { Content, ListItem, Left, Right, Icon,Button} from 'native-base';
 
 
 export default class GettingIn extends Component {
@@ -15,20 +15,21 @@ export default class GettingIn extends Component {
         return (
               <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
                   <Image style={styles.logo} source={require('../../../images/LightenedLogo.png')} />
+                  <Content>
 
                 <View style={styles.list}>
-                    <TouchableOpacity style={styles.student} onPress={()=> this.props.navigation.navigate('SignUp', {type:0} )}>
+                    <TouchableOpacity style={styles.student} onPress={()=> this.props.navigation.navigate('SignUp', {type:1} )}>
                         <Image style={styles.imageStyle} source={require('../../../images/student_1144709.png')} />
                         <Text style={styles.studentTxt}>Student</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.Teacher} onPress={()=> this.props.navigation.navigate('SignUp', {type:1} )}>
-                        <Image style={styles.imageStyle} source={require('../../../images/img_245706.png')} />
+                    <TouchableOpacity style={styles.Teacher} onPress={()=> this.props.navigation.navigate('SignUp', {type:2} )}>
+                        <Image style={styles.imageStyle} source={require('../../../images/Worker.png')} />
                         <Text style={styles.teacherTxt}>Teacher</Text>
                     </TouchableOpacity>
 
                 </View>
-
+                </Content>
               </ImageBackground>
         );
     }
@@ -36,8 +37,8 @@ export default class GettingIn extends Component {
 
 const styles = StyleSheet.create({
   logo:{
-    width: 450, 
-    height: 450, 
+    width: '65%', 
+    height: '65%', 
     justifyContent: 'center', 
     alignSelf: 'center'
   },

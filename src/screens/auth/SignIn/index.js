@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground, ActivityIndicator, AsyncStorage } from 'react-native';
-import { Form, Item, Button, Input, Toast} from 'native-base';
+import { Content, Form, Item, Button, Input, Toast} from 'native-base';
 import Server from '../../../constants/config';
 import axios from "axios";
 import {setUser} from "../../../reducers";
@@ -76,7 +76,8 @@ class SignIn extends Component {
     render() {
         return (
             <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
-                  <Image style={styles.logo} source={require('../../../images/LightenedLogo.png')} />
+            <Image style={styles.logo} source={require('../../../images/LightenedLogo.png')} />
+                <Content>
                   
                 <View style={styles.list}>
                     <Form>
@@ -107,6 +108,7 @@ class SignIn extends Component {
                     </TouchableOpacity>
 
                 </View>
+                </Content>
             </ImageBackground>
         );
     }
@@ -114,8 +116,8 @@ class SignIn extends Component {
 
 const styles = StyleSheet.create({
   logo:{
-    width: 450, 
-    height: 450, 
+    width: '50%', 
+    height: '50%', 
     justifyContent: 'center', 
     alignSelf: 'center'
   },
