@@ -1,5 +1,5 @@
 
-const SERVER_URL = 'http://192.168.138.1:80/';
+const SERVER_URL = 'http://app.gsikw.com/';
 
 export default {
     url:SERVER_URL,
