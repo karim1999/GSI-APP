@@ -6,6 +6,7 @@ import AddLecture from "../screens/app/Lectures/AddLecture";
 import EditLecture from "../screens/app/Lectures/EditLecture";
 import LecturePayment from "../screens/app/Teacher/LecturePayment";
 import Teacher from "../screens/app/Teacher";
+import SettingsTeacher from "../screens/app/Teacher/SettingsTeacher";
 import Payments from "../screens/app/Teacher/Payments";
 import Wallet from "../screens/app/Teacher/Wallet";
 import Color from "../constants/colors";
@@ -34,17 +35,18 @@ const PaymentsStack = createStackNavigator({
     headerMode: 'none',
 });
 
-// const SettingsStack = createStackNavigator({
-//     Search,
-// },{
-//     headerMode: 'none',
-// });
+const SettingsTeacherStack = createStackNavigator({
+    SettingsTeacher,
+},{
+    headerMode: 'none',
+});
 
 const AppStackTeacher = createMaterialTopTabNavigator (
     {
         TeacherStack,
         WalletStack,
         PaymentsStack,
+        SettingsTeacherStack
     },
     {
         navigationOptions: ({ navigation }) => ({
@@ -59,9 +61,9 @@ const AppStackTeacher = createMaterialTopTabNavigator (
                 else if (routeName === 'PaymentsStack') {
                     return <Icon name='cash-multiple' style={{color: tintColor, fontSize: 26}} type="MaterialCommunityIcons" />
                 }
-                // else if (routeName === 'SettingsStack') {
-                //     return <Icon name='settings' style={{color: tintColor, fontSize: 26}} type="MaterialIcons" />
-                // }
+                else if (routeName === 'SettingsTeacherStack') {
+                    return <Icon name='settings' style={{color: tintColor, fontSize: 26}} type="MaterialIcons" />
+                }
             },
             tabBarLabel: ({ focused, tintColor }) => {
                 const { routeName } = navigation.state;
@@ -75,9 +77,9 @@ const AppStackTeacher = createMaterialTopTabNavigator (
                   case 'PaymentsStack':
                       return <Text style={{color: tintColor, fontSize: 14}}>Payment</Text>;
                       break;
-                //   case 'SettingsStack':
-                //     return <Text style={{color: tintColor, fontSize: 14}}>Settings</Text>;
-                //     break;
+                  case 'SettingsTeacherStack':
+                    return <Text style={{color: tintColor, fontSize: 14}}>Settings</Text>;
+                    break;
         
         
                 }

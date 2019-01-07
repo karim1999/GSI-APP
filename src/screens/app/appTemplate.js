@@ -28,7 +28,7 @@ class AppTemplate extends Component {
         }else{
             AsyncStorage.getItem('token').then(userToken => {
                 return axios.post(Server.url+'api/auth/me?token='+userToken).then(response => {
-                    this.props.setUser(response.data.user);
+                    this.props.setUser(response.data);
                 }).catch(error => {
                     Toast.show({
                         text: 'Error reaching the server.',

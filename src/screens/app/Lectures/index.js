@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider } from 'react-native';
 import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body, 
-    Right, Thumbnail, Card, CardItem, Toast, H3} from 'native-base';
+    Right, Thumbnail, Card, CardItem, Toast, Textarea, H3} from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
@@ -20,7 +20,10 @@ class Lectures extends Component {
             isLoading: false,
             isSetting: false,
             isApplying: false,
-            editable: 1
+            editable: 1,
+            isCommented: false,
+            rate: 1,
+            showComment: []
 
         };
         this.setDate = this.setDate.bind(this);
@@ -39,6 +42,7 @@ class Lectures extends Component {
                 this.setState({
                     isLoading: false,
                 });
+                this.setUser(response.data);
                 Toast.show({
                     text: "done.",
                     buttonText: "Ok",
@@ -67,8 +71,8 @@ class Lectures extends Component {
                         AsyncStorage.getItem('token').then(userToken => {
                             return axios.delete(Server.url+'api/deleteLecture/'+this.state.lecture.id+'?token='+userToken).then(response => {
                                 // alert(response.data);
+                                this.props.setUser(response.data);
                                 this.props.navigation.navigate("Teacher");
-                                this.props.setUser(response.data.user);
                                 this.setState({
                                     isLoading: false,
                                 });
@@ -140,6 +144,66 @@ class Lectures extends Component {
         )
 
     }
+
+    createRating(rate){
+        let i;
+        let stars= [];
+        for(i =0; i< rate; i++ ){
+            stars.push(<Icon key={i} active style={styles.star} type="MaterialCommunityIcons" name="star" />);
+        }
+        for(i; i<5; i++){
+            stars.push(<Icon key={i} active style={styles.star2} type="MaterialCommunityIcons" name="star" />);
+        }
+        return stars;
+    }
+
+    addComment(){
+        if(this.state.comment == ""){
+
+            Toast.show({
+                text: 'comment cannot be empty.',
+                type: "danger",
+                buttonText: 'Okay'
+            });
+
+        }else{
+            this.setState({
+                isCommented:true
+            });
+            AsyncStorage.getItem('token').then(userToken => {
+                return axios.post(Server.url+'api/comments/'+ this.state.lecture.id + '?token='+ userToken,
+                {
+                    rate: this.state.rate,
+                    comment: this.state.comment
+                }
+                ).then(response => {
+                    Toast.show({
+                        text: 'Successfully commented.',
+                        type: 'success',
+                        buttonText: 'Okay'
+                    });
+                    this.componentDidMount();
+                    this.setState({
+                        isCommented: false,
+                    });
+                });
+
+            })
+        }
+    }
+
+    componentDidMount()
+    {
+        AsyncStorage.getItem('token').then(userToken => {
+            return axios.get(Server.url+'api/showcomments/'+ this.state.lecture.id + '?token='+ userToken)
+            .then(response => {
+                this.setState({
+                    showComment: response.data
+                });
+            });
+
+        })        
+    }
     
     render() {
         var timeStart = new Date("01/01/2007 " + this.state.lecture.start_duration).getHours()
@@ -151,18 +215,36 @@ class Lectures extends Component {
                         _.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id) ? (
                             <Text></Text>
                         ):(
-                            <Button
-                            onPress={() => this.props.navigation.navigate('WeebView', {...this.state.lecture})}
-                            style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
-    
-                            <Text style={{flex: 1, paddingLeft: 10}}> Apply </Text>
-                            {this.state.isApplying && (
-                                <ActivityIndicator size="small" color="#000000" />
-                            )}
-    
-                            <Icon name="ios-checkmark" style={{color: Color.mainColor, fontSize: 30}}/>
-    
-                            </Button>
+                            (this.state.lecture.payment == 1)?(
+                                
+                                <Button
+                                onPress={() => this.props.navigation.navigate('WeebView', {...this.state.lecture})}
+                                style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+        
+                                <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
+                                {this.state.isApplying && (
+                                    <ActivityIndicator size="small" color="#000000" />
+                                )}
+        
+                                <Icon name="ios-checkmark" style={{color: Color.mainColor, fontSize: 30}}/>
+        
+                                </Button>
+
+                            ):(
+                                <Button
+                                onPress={()=> this.onRegisterPressed()}
+                                style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+        
+                                <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
+                                {this.state.isApplying && (
+                                    <ActivityIndicator size="small" color="#000000" />
+                                )}
+        
+                                <Icon name="ios-checkmark" style={{color: Color.mainColor, fontSize: 30}}/>
+        
+                                </Button>
+
+                            )
 
                         )
 
@@ -170,7 +252,7 @@ class Lectures extends Component {
                             <View>
                             <Button onPress={() => this.setState({isSetting: !this.state.isSetting})} style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
                             <Text style={{flex: 1, color: '#000'}}> Settings </Text>
-                            <Icon name={this.state.isSetting? "ios-arrow-dropup-circle": "ios-arrow-dropdown-circle"} style={{color: Color.mainColor, fontSize: 25}}/>
+                            <Icon type="FontAwesome" name={this.state.isSetting? "arrow-circle-o-up": "arrow-circle-o-down"} style={{color: Color.mainColor, fontSize: 25}}/>
                             </Button>
                             { 
                                 (this.state.isSetting) && (
@@ -272,16 +354,16 @@ class Lectures extends Component {
                             <H3 style={styles.lectureTxt}>Gender</H3>
                             {
                                 (this.state.lecture.gender == 1) ? (
-                                    <Text style={{position: 'absolute',left: 230,fontFamily: "Roboto",}}>
+                                    <Text style={{position: 'absolute',left: 240,fontFamily: "Roboto",}}>
                                         Male
                                     </Text>
 
                                 ):(this.state.lecture.gender == 2)?(
-                                    <Text style={{position: 'absolute',left: 230,fontFamily: "Roboto",}}>
+                                    <Text style={{position: 'absolute',left: 240,fontFamily: "Roboto",}}>
                                         Female
                                     </Text>
                                 ):(
-                                    <Text style={{position: 'absolute',left: 230,fontFamily: "Roboto",}}>
+                                    <Text style={{position: 'absolute',left: 240,fontFamily: "Roboto",}}>
                                         Both
                                     </Text>
                                 )
@@ -289,20 +371,28 @@ class Lectures extends Component {
                         </Item>
 
                         <Item style={styles.item2}>
-                            <Icon type="Entypo" name="back-in-time" />
-                            <H3 style={styles.lectureTxt}>Duration</H3>
-                            <Text style={{position: 'absolute',left: 200,fontFamily: "Roboto",}}>
-                            {this.state.lecture.start_duration} To {this.state.lecture.end_duration}
+                            <Icon type="Entypo" name="calendar" />
+                            <H3 style={styles.lectureTxt}>Date</H3>
+                            <Text style={{position: 'absolute',left: 140,fontFamily: "Roboto",}}>
+                            {this.state.lecture.start_date} To { this.state.lecture.end_date}
                             </Text>                            
                         </Item>
 
                         <Item style={styles.item2}>
+                            <Icon type="Entypo" name="back-in-time" />
+                            <H3 style={styles.lectureTxt}>Duration</H3>
+                            <Text style={{position: 'absolute',left: 160,fontFamily: "Roboto",}}>
+                            {this.state.lecture.start_time} To {this.state.lecture.end_time}
+                            </Text>                            
+                        </Item>
+
+                        {/* <Item style={styles.item2}>
                             <Icon type="FontAwesome" name="users" />
                             <H3 style={styles.lectureTxt}>Attendance</H3>
                             <Text style={{position: 'absolute',left: 200,fontFamily: "Roboto",}}>
                             {this.state.lecture.length}
                             </Text>
-                        </Item>
+                        </Item> */}
 
                         <Item style={styles.item2}>
                             <Icon type="FontAwesome" name="check-square-o" />
@@ -318,24 +408,76 @@ class Lectures extends Component {
 
                 <View style={styles.BoxComment}>  
                     <Card style={{borderWidth: 0}} transparent={true}>
+
+                <FlatList
+                ListEmptyComponent={
+                            <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>No comments for this lecture</Text>
+                        }
+                    data={_.reverse(this.state.showComment)}
+                    renderItem={({item}) => (
+                        <View>
                         <CardItem style={{}}>
                             <Left>
                             <Thumbnail source={require('../../../images/Background.png')} />
-                            <Text style={{paddingLeft: 10, fontSize: 19, fontFamily: "Roboto",}}>John Hendrseon</Text>
+                            <Text style={{paddingLeft: 10, fontSize: 19, fontFamily: "Roboto",}}>{item.user.name}</Text>
                             </Left>
                             <Right style={styles.allStarsComment}>
-                                <Icon style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                <Icon style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                <Icon style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                <Icon style={styles.star} type="MaterialCommunityIcons" name="star" />
-                                <Icon style={styles.star} type="MaterialCommunityIcons" name="star" />
+                                {
+                                    this.createRating(item.rate)
+                                }
                             </Right> 
                         </CardItem>
                         <CardItem style={{}}>
                             <Body>
-                            <Text style={{fontFamily: "Roboto",}}>asdsadsaddsddddsadasdsad</Text>
+                            <Text style={{fontFamily: "Roboto",}}>{item.comment}</Text>
                             </Body>
                         </CardItem>
+                        </View>
+                        )}
+                        keyExtractor = { (item, index) => index.toString() }
+                        />
+                        {
+                            (this.props.user.type == 1)? (
+                                (_.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id))&&(
+                                <View>
+                                <CardItem>
+                                    <Icon type="MaterialIcons" name='rate-review' />
+                                    <Label>Rate</Label>
+                                    <Slider
+                                        value={Number(this.state.rate)}
+                                        onValueChange={(rate) => this.setState({rate})}
+                                        style={{flex: 1}} step={1} maximumValue={5} minimumValue={1}/>
+                                        <Text>
+                                        {Number(this.state.rate)}
+                                        </Text>
+                                </CardItem>
+                                <CardItem style={{marginBottom: 10}}>
+                                <Textarea
+                                    style={{height: 80, paddingTop: 0, marginTop: 0, flex: 1}}
+                                    rowSpan={3}
+                                    bordered
+                                    onChangeText={(comment) => this.setState({comment})}
+                                    placeholder="Write your comment"
+                                    placeholderTextColor="#ccc5c5"
+                                    value={this.state.description}
+                                />
+                            </CardItem>
+                                <Button
+                                    onPress={() => this.addComment()}
+                                    style={{flexDirection: "row", backgroundColor: '#d3d3ea'}}
+                                    block light
+                                >
+                                    <Text>Add comment</Text>
+                                    {this.state.isCommented && (
+                                        <ActivityIndicator size="small" color="#000" />
+                                    )}
+                                    <Icon type="FontAwesome" name="comment" style={{color: Color.mainColor, fontSize: 20}}/>
+                                </Button>
+                            </View>
+                                )
+
+                            ):null
+                        }
                     </Card>
                 </View>
                 
@@ -370,7 +512,6 @@ const styles = StyleSheet.create({
     },
     item2:{
         height: 70, 
-        flex: 1
     },
     image:{
         width:80, 
@@ -388,6 +529,10 @@ const styles = StyleSheet.create({
     star:{
         color: '#eeb829',
         fontSize: 22,
+    },
+    star2:{
+        color: '#d7d7d7',
+        fontSize: 22
     },
     allStars:{
         position: 'absolute',

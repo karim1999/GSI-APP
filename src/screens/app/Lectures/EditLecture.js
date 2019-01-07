@@ -34,13 +34,17 @@ export default class EditLecture extends Component {
             title: this.props.navigation.state.params.title,
             subject: this.props.navigation.state.params.subject,
             price: this.props.navigation.state.params.price,
-            start_duration: this.props.navigation.state.params.start_duration,
-            end_duration: this.props.navigation.state.params.end_duration,
             payment: this.props.navigation.state.params.payment,
             type_course: this.props.navigation.state.params.type_course,
             gender: this.props.navigation.state.params.gender,
             allowed: this.props.navigation.state.params.allowed,
             description: this.props.navigation.state.params.description,
+            start_date: this.props.navigation.state.params.start_date,
+            end_date: this.props.navigation.state.params.end_date,
+            start_time: this.props.navigation.state.params.start_time,
+            end_time: this.props.navigation.state.params.end_time,
+            isStartDateVisible: false,
+            isEndDateVisible: false,
             isStartTimeVisible: false,
             isEndTimeVisible: false,
             isLoading: false
@@ -48,23 +52,43 @@ export default class EditLecture extends Component {
     }
 
     // Start timePicker
+    _showStartDatePicker = () => this.setState({ isStartDateVisible: true });
+    _showEndDatePicker = () => this.setState({ isEndDateVisible: true });
     _showStartTimePicker = () => this.setState({ isStartTimeVisible: true });
     _showEndTimePicker = () => this.setState({ isEndTimeVisible: true });
 
+    _hideStartDatePicker = () => this.setState({ isStartDateVisible: false });
+    _hideEndDatePicker = () => this.setState({ isEndDateVisible: false });
     _hideStartTimePicker = () => this.setState({ isStartTimeVisible: false });
     _hideEndTimePicker = () => this.setState({ isEndTimeVisible: false });
+
+    _handleStartDatePicked = (date) => {
+        this.setState({
+            isStartDateVisible: false,
+            start_date: moment(date).format('YYYY-MM-DD'),
+            // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+        })
+    };
+
+    _handleEndDatePicked = (date) => {
+        this.setState({
+            isEndDateVisible: false,
+            end_date: moment(date).format('YYYY-MM-DD')
+        })
+    };
     
     _handleStartTimePicked = (date) => {
         this.setState({
             isStartTimeVisible: false,
-            start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            start_time: moment(date).format('h:mm a'),
+            // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
         })
     };
 
     _handleEndTimePicked = (date) => {
         this.setState({
             isEndTimeVisible: false,
-            end_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            end_time: moment(date).format('h:mm a')
         })
     };
     //End timePicker
@@ -105,17 +129,23 @@ export default class EditLecture extends Component {
         });
         return AsyncStorage.getItem('token').then(userToken => {
             let data = new FormData();
+            start_duration = this.state.start_date+" "+this.state.start_time;
+            end_duration = this.state.end_date+" "+this.state.end_time;
             data.append('title', this.state.title);
             data.append('subject', this.state.subject);
             data.append('price', this.state.price);
             data.append('end_date', this.state.end_date);
-            data.append('start_duration', this.state.start_duration);
-            data.append('end_duration', this.state.end_duration);
+            data.append('start_duration', start_duration);
+            data.append('end_duration', end_duration);
             data.append('payment', this.state.payment);
             data.append('type_course', this.state.type_course);
             data.append('gender', this.state.gender);
             data.append('allowed', this.state.allowed);
             data.append('description', this.state.description);
+            data.append('start_date', this.state.start_date);
+            data.append('end_date', this.state.end_date);
+            data.append('start_time', this.state.start_time);
+            data.append('end_time', this.state.end_time);
             if (this.state.img) {
                 data.append('img', {
                     name: "img",
@@ -132,8 +162,8 @@ export default class EditLecture extends Component {
                     buttonText: "Ok",
                     type: "success"
                 });
-                this.props.navigation.navigate("CourseView");
                 this.props.setUser(response.data);
+                this.props.navigation.navigate("Teacher");
             }).catch(error => {
             })
         }).then(() => {
@@ -211,30 +241,58 @@ export default class EditLecture extends Component {
                         </Item>
 
                         <Item style={{height: 90}}>
+                            <Icon style={{paddingBottom: 20, paddingTop: 10}} type="Entypo" name='calendar' />
+                            <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
+                            <View style={{paddingBottom: 20, paddingTop: 10}}>
+                                <TouchableOpacity onPress={this._showStartDatePicker}>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_date}</Text>
+                                </TouchableOpacity>
+                                <DateTimePicker
+                                    isVisible={this.state.isStartDateVisible}
+                                    onConfirm={this._handleStartDatePicked}
+                                    onCancel={this._hideStartDatePicker}
+                                    is24Hour={false}
+                                />
+                          </View>
+                            <Text style={{ position:'absolute', left: 30, paddingTop:45}}>To</Text>
+                            <View style={{position:'absolute', left: 75, paddingTop:45}}>
+                                <TouchableOpacity onPress={this._showEndDatePicker}>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_date}</Text>
+                                </TouchableOpacity>
+                                <DateTimePicker
+                                    isVisible={this.state.isEndDateVisible}
+                                    onConfirm={this._handleEndDatePicked}
+                                    onCancel={this._hideEndDatePicker}
+                                    is24Hour={false}
+                                />
+                          </View>
+                        </Item>
+
+                        <Item style={{height: 90}}>
                             <Icon style={{paddingBottom: 20, paddingTop: 10}} name='md-time' />
                             <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
                             <View style={{paddingBottom: 20, paddingTop: 10}}>
                                 <TouchableOpacity onPress={this._showStartTimePicker}>
-                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_duration}</Text>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_time}</Text>
                                 </TouchableOpacity>
                                 <DateTimePicker
                                     isVisible={this.state.isStartTimeVisible}
                                     onConfirm={this._handleStartTimePicked}
                                     onCancel={this._hideStartTimePicker}
-                                    mode={'datetime'}
+                                    mode={'time'}
                                     is24Hour={false}
                                 />
                           </View>
                             <Text style={{ position:'absolute', left: 30, paddingTop:45}}>To</Text>
-                            <View style={{position:'absolute', left: 70, paddingTop:45}}>
+                            <View style={{position:'absolute', left: 68, paddingTop:45}}>
                                 <TouchableOpacity onPress={this._showEndTimePicker}>
-                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_duration}</Text>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_time}</Text>
                                 </TouchableOpacity>
                                 <DateTimePicker
                                     isVisible={this.state.isEndTimeVisible}
                                     onConfirm={this._handleEndTimePicked}
                                     onCancel={this._hideEndTimePicker}
-                                    mode={'datetime'}
+                                    mode={'time'}
                                     is24Hour={false}
                                 />
                           </View>
@@ -273,12 +331,12 @@ export default class EditLecture extends Component {
                             <Text style={styles.font}>Payment </Text>
 
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}> Before Attend </Text>
-                                <Radio style={{paddingRight: 10, paddingLeft: 8}} selected={this.state.payment === 1}
+                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Before Attend</Text>
+                                <Radio style={{paddingRight: 4, paddingLeft: 4}} selected={this.state.payment === 1}
                                     onPress={(payment) => {this.setState({payment: 1})}}/>
 
-                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend </Text>
-                                <Radio style={{paddingLeft: 8}} selected={this.state.payment === 2}
+                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend</Text>
+                                <Radio style={{paddingLeft: 4}} selected={this.state.payment === 2}
                                     onPress={(payment) => {this.setState({payment: 2})}}/>  
                             </View>
 
@@ -307,17 +365,17 @@ export default class EditLecture extends Component {
                             <View style={{flexDirection: 'row',  paddingLeft: 10}}>
                                 <Icon type="FontAwesome" name='male' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Male</Text>
-                                <Radio style={{paddingRight: 5, paddingLeft: 8}} selected={this.state.gender === 1}
+                                <Radio style={{paddingRight: 3, paddingLeft: 4}} selected={this.state.gender === 1}
                                     onPress={(gender) => {this.setState({gender: 1})}}/>
 
                                 <Icon type="FontAwesome" name='female' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Female</Text>
-                                <Radio style={{paddingLeft: 8}} selected={this.state.gender === 2}
+                                <Radio style={{paddingLeft: 4}} selected={this.state.gender === 2}
                                     onPress={(gender) => {this.setState({gender: 2})}}/>
                                 
                                 <Icon type="FontAwesome" name='transgender-alt' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Both</Text>
-                                <Radio style={{paddingLeft: 8}} selected={this.state.gender === 3}
+                                <Radio style={{paddingLeft: 4}} selected={this.state.gender === 3}
                                     onPress={(gender) => {this.setState({gender: 3})}}/>
                             </View>
 

@@ -29,7 +29,7 @@ class drawerContentComponentsTeacher extends Component {
                 <View style={{flex: 1, width: 280, justifyContent: 'center', backgroundColor: '#c0bfb4'}} >
                     <Image source={require('../images/bg.jpg')}
                         style={{width: 45, height: 45, borderRadius: 30, position: 'absolute', right: 20 }} />
-                    <Text style={styles.headerText}>{this.props.user.name}</Text>
+                    <Text style={styles.headerText}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
                     <Text style={styles.headerText}>Teacher</Text>
                 </View>
             </View>

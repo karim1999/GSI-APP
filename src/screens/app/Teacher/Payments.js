@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, ActivityIndicator, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, ActivityIndicator, AsyncStorage, Linking  } from 'react-native';
 import {H1, H3, Item, Label, Button, Icon} from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
 import Server from "../../../constants/config";
+import {setUser} from "../../../reducers";
+import {connect} from "react-redux";
 
-export default class Payments extends Component {
+class Payments extends Component {
     constructor(props){
         super(props);
         this.state = {
             showLectAndUser: [],
             isLoading: false,
             random:['#d93232', '#636c8f', '#6c856c', '#fbaf5d'],
+            url: ''
         }
     }
 
@@ -25,7 +28,8 @@ export default class Payments extends Component {
             .then(response => {
                 this.setState({
                     isLoading: false,
-                    showLectAndUser: response.data
+                    showLectAndUser: response.data,
+                    url: Server.url+'api/export?token='+userToken
                 })
             }).catch(error => {
                 Toast.show({
@@ -37,9 +41,31 @@ export default class Payments extends Component {
         })
     }
 
+    onReportPressed()
+    {
+
+    }
+
     render() {
         return (
             <AppTemplate title="Payment" navigation={this.props.navigation}>
+                {
+                    (this.props.user.lecture.length == 0)?null:
+                    (
+                        <Button
+                        onPress={()=> Linking.openURL(this.state.url)}
+                        style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+    
+                        <Text style={{flex: 1, paddingLeft: 10}}> Report Lectures </Text>
+                        {this.state.isApplying && (
+                            <ActivityIndicator size="small" color="#000000" />
+                        )}
+    
+                        <Icon type="Entypo" name="news" style={{color: Color.mainColor, fontSize: 20}}/>
+    
+                        </Button>
+                    )
+                }
                 <View style={styles.content}>
                 {
                     (this.state.isLoading)? (
@@ -163,3 +189,14 @@ const styles = StyleSheet.create({
     },
 
 });
+const mapStateToProps = ({ user }) => ({
+    user,
+});
+
+const mapDispatchToProps = {
+    setUser,
+};
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Payments);

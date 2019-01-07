@@ -41,14 +41,18 @@ export default class AddLecture extends Component {
             allowed: "",
             img: "",
             description: "",
-            start_duration: " Start Date & Time",
-            end_duration: " End Date & Time",
+            start_date: " Start Date",
+            end_date: " End Date",
+            start_time: " Start Time",
+            end_time: " End Time",
             selectedHours: 0,
             selectedMinutes: 0,
             searchedAdresses: [],
             searchedUsers: [],
             tableData:[], 
             a:[],
+            isStartDateVisible: false,
+            isEndDateVisible: false,
             isStartTimeVisible: false,
             isEndTimeVisible: false,
             namePhone:[],
@@ -59,26 +63,53 @@ export default class AddLecture extends Component {
     }
 
     // Start timePicker
+    _showStartDatePicker = () => this.setState({ isStartDateVisible: true });
+    _showEndDatePicker = () => this.setState({ isEndDateVisible: true });
     _showStartTimePicker = () => this.setState({ isStartTimeVisible: true });
     _showEndTimePicker = () => this.setState({ isEndTimeVisible: true });
 
+    _hideStartDatePicker = () => this.setState({ isStartDateVisible: false });
+    _hideEndDatePicker = () => this.setState({ isEndDateVisible: false });
     _hideStartTimePicker = () => this.setState({ isStartTimeVisible: false });
     _hideEndTimePicker = () => this.setState({ isEndTimeVisible: false });
+
+    _handleStartDatePicked = (date) => {
+        this.setState({
+            isStartDateVisible: false,
+            start_date: moment(date).format('YYYY-MM-DD'),
+            // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+        })
+    };
+
+    _handleEndDatePicked = (date) => {
+        this.setState({
+            isEndDateVisible: false,
+            end_date: moment(date).format('YYYY-MM-DD')
+        })
+    };
     
     _handleStartTimePicked = (date) => {
         this.setState({
             isStartTimeVisible: false,
-            start_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            start_time: moment(date).format('h:mm a'),
+            end_time: moment(date).add(2, 'hours').format('h:mm a')
+            // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
         })
+        var now  = this.state.start_date+" "+this.state.start_time;
+        var then = this.state.end_date+" "+this.state.end_time;
+        
+       diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
+       price = Math.round(diffrance * 10);
+       this.setState({price})
     };
 
     _handleEndTimePicked = (date) => {
         this.setState({
             isEndTimeVisible: false,
-            end_duration: moment(date).format('YYYY-MM-DD h:mm a')
+            end_time: moment(date).format('h:mm a')
         })
-        var now  = this.state.start_duration;
-        var then = this.state.end_duration;
+        var now  = this.state.start_date+" "+this.state.start_time;
+        var then = this.state.end_date+" "+this.state.end_time;
         
        diffrance = Math.abs( moment(now,"YYYY-MM-DD HH:mm A").diff(moment(then,"YYYY-MM-DD HH:mm A"),'hours',true))
        price = Math.round(diffrance * 10);
@@ -102,7 +133,7 @@ export default class AddLecture extends Component {
                 datas: showData
             })
         }).catch(error => {
-            alert(JSON.stringify(error))
+           
         })
     }
 
@@ -188,7 +219,8 @@ export default class AddLecture extends Component {
         });
             if(this.state.title == "" || this.state.subject == "" || this.state.type_course == "" || 
             this.state.gender == "" || this.state.allowed == ""  || this.state.description == "" || 
-            this.state.start_duration == "" || this.state.end_duration == ""){
+            this.state.start_date == "" || this.state.end_date == "" || this.state.start_time == "" ||
+            this.state.end_time == ""){
                 Toast.show({
                     text: 'please fill out fields.',
                     type: "danger",
@@ -202,8 +234,9 @@ export default class AddLecture extends Component {
             // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
                 return AsyncStorage.getItem('token').then(userToken => {
                     let data = new FormData();
-                    duration_date = this.state.start_duration.split(" ")[0];
-                    data.append('start_date', duration_date);
+                    start_duration = this.state.start_date+" "+this.state.start_time;
+                    end_duration = this.state.end_date+" "+this.state.end_time;
+                    // duration_date = start_duration.split(" ")[0];
                     data.append('title', this.state.title);
                     data.append('subject', this.state.subject);
                     data.append('payment', this.state.payment);
@@ -212,8 +245,12 @@ export default class AddLecture extends Component {
                     data.append('price', this.state.price);
                     data.append('allowed', this.state.allowed);
                     data.append('description', this.state.description);
-                    data.append('start_duration', this.state.start_duration);
-                    data.append('end_duration', this.state.end_duration);
+                    data.append('start_duration', start_duration);
+                    data.append('end_duration', end_duration);
+                    data.append('start_date', this.state.start_date);
+                    data.append('end_date', this.state.end_date);
+                    data.append('start_time', this.state.start_time);
+                    data.append('end_time', this.state.end_time);
                     // if(timeStart>timeEnd){
                     //     if (this.state.price) {
                     //         data.append('price', this.state.price * (timeStart - timeEnd ));
@@ -247,8 +284,13 @@ export default class AddLecture extends Component {
                                 type: "success"
                             });
                             this.props.navigation.navigate("Teacher");
+                            this.props.setUser(response.data);
                         }).catch(error => {
-                            alert(JSON.stringify(data));
+                            Toast.show({
+                                text: "Check your connection",
+                                buttonText: "Ok",
+                                type: "danger"
+                            });
                             this.setState({
                                 isLoading: false,
                             });
@@ -319,32 +361,60 @@ export default class AddLecture extends Component {
                                    style={{color: '#9e9797', paddingLeft: 25}}
                             />
                         </Item>
+                        
+                        <Item style={{height: 90}}>
+                            <Icon style={{paddingBottom: 20, paddingTop: 10}} type="Entypo" name='calendar' />
+                            <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
+                            <View style={{paddingBottom: 20, paddingTop: 10}}>
+                                <TouchableOpacity onPress={this._showStartDatePicker}>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_date}</Text>
+                                </TouchableOpacity>
+                                <DateTimePicker
+                                    isVisible={this.state.isStartDateVisible}
+                                    onConfirm={this._handleStartDatePicked}
+                                    onCancel={this._hideStartDatePicker}
+                                    is24Hour={false}
+                                />
+                          </View>
+                            <Text style={{ position:'absolute', left: 30, paddingTop:45}}>To</Text>
+                            <View style={{position:'absolute', left: 75, paddingTop:45}}>
+                                <TouchableOpacity onPress={this._showEndDatePicker}>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_date}</Text>
+                                </TouchableOpacity>
+                                <DateTimePicker
+                                    isVisible={this.state.isEndDateVisible}
+                                    onConfirm={this._handleEndDatePicked}
+                                    onCancel={this._hideEndDatePicker}
+                                    is24Hour={false}
+                                />
+                          </View>
+                        </Item>
 
                         <Item style={{height: 90}}>
                             <Icon style={{paddingBottom: 20, paddingTop: 10}} name='md-time' />
                             <Text style={{paddingBottom: 20, paddingTop: 10}}>From </Text>
                             <View style={{paddingBottom: 20, paddingTop: 10}}>
                                 <TouchableOpacity onPress={this._showStartTimePicker}>
-                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_duration}</Text>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.start_time}</Text>
                                 </TouchableOpacity>
                                 <DateTimePicker
                                     isVisible={this.state.isStartTimeVisible}
                                     onConfirm={this._handleStartTimePicked}
                                     onCancel={this._hideStartTimePicker}
-                                    mode={'datetime'}
+                                    mode={'time'}
                                     is24Hour={false}
                                 />
                           </View>
                             <Text style={{ position:'absolute', left: 30, paddingTop:45}}>To</Text>
-                            <View style={{position:'absolute', left: 70, paddingTop:45}}>
+                            <View style={{position:'absolute', left: 68, paddingTop:45}}>
                                 <TouchableOpacity onPress={this._showEndTimePicker}>
-                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_duration}</Text>
+                                    <Text style={{color: '#9e9797', paddingLeft: 45}}>{this.state.end_time}</Text>
                                 </TouchableOpacity>
                                 <DateTimePicker
                                     isVisible={this.state.isEndTimeVisible}
                                     onConfirm={this._handleEndTimePicked}
                                     onCancel={this._hideEndTimePicker}
-                                    mode={'datetime'}
+                                    mode={'time'}
                                     is24Hour={false}
                                 />
                           </View>
@@ -383,12 +453,12 @@ export default class AddLecture extends Component {
                             <Text style={styles.font}>Payment </Text>
 
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}> Before Attend </Text>
-                                <Radio style={{paddingRight: 10, paddingLeft: 8}} selected={this.state.payment === 1}
+                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}> Before Attend</Text>
+                                <Radio style={{paddingRight: 4, paddingLeft: 4}} selected={this.state.payment === 1}
                                     onPress={(payment) => {this.setState({payment: 1})}}/>
 
-                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend </Text>
-                                <Radio style={{paddingLeft: 8}} selected={this.state.payment === 2}
+                                <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>After Attend</Text>
+                                <Radio style={{paddingLeft: 4}} selected={this.state.payment === 2}
                                     onPress={(payment) => {this.setState({payment: 2})}}/>  
                             </View>
 
@@ -414,20 +484,20 @@ export default class AddLecture extends Component {
                             <Icon type="FontAwesome" name="transgender" />
                             <Text style={styles.font}>Sex:</Text>
 
-                            <View style={{flexDirection: 'row',  paddingLeft: 10}}>
+                            <View style={{flexDirection: 'row',  paddingLeft: 4}}>
                                 <Icon type="FontAwesome" name='male' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Male</Text>
-                                <Radio style={{paddingRight: 5, paddingLeft: 8}} selected={this.state.gender === 1}
+                                <Radio style={{paddingRight: 3, paddingLeft: 4}} selected={this.state.gender === 1}
                                     onPress={(gender) => {this.setState({gender: 1})}}/>
 
                                 <Icon type="FontAwesome" name='female' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Female</Text>
-                                <Radio style={{paddingLeft: 8, paddingRight:5}} selected={this.state.gender === 2}
+                                <Radio style={{paddingLeft: 4, paddingRight:3}} selected={this.state.gender === 2}
                                     onPress={(gender) => {this.setState({gender: 2})}}/>
                                 
                                 <Icon type="FontAwesome" name='transgender-alt' />
                                 <Text style={{fontFamily: "Roboto", color: '#9e9797'}}>Both</Text>
-                                <Radio style={{paddingLeft: 8}} selected={this.state.gender === 3}
+                                <Radio style={{paddingLeft: 4}} selected={this.state.gender === 3}
                                     onPress={(gender) => {this.setState({gender: 3})}}/>
                             </View>
 

@@ -29,9 +29,8 @@ class drawerContentComponents extends Component {
                 <View style={{flex: 1, width: 280, justifyContent: 'center', backgroundColor: '#c0bfb4'}} >
                     <Image source={require('../images/bg.jpg')}
                         style={{width: 45, height: 45, borderRadius: 30, position: 'absolute', right: 20 }} />
-                    <Text style={styles.headerText}>{this.props.user.name}</Text>
-                    <Text style={styles.headerText}>Student</Text>
-                    <Text style={styles.headerText}>1000 KWD</Text>
+                        <Text style={styles.headerText}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
+                        <Text style={styles.headerText}>Student</Text>
                 </View>
             </View>
             <View style={styles.screenContainer}>
@@ -50,6 +49,12 @@ class drawerContentComponents extends Component {
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('Reports')}>
                     <Image source={require('../images/reports.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Reports</Text>
+                    <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('ProfileInfo')}>
+                    <Image source={require('../images/reports.png')} style={{width: 25, height: 25, marginRight: 20}} />
+                    <Text>Profile</Text>
                     <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 

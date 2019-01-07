@@ -33,7 +33,7 @@ class SignIn extends Component {
                 email: this.state.email,
                 password: this.state.password
             }).then(response => {
-                this.props.setUser(response.data, response.data.access_token);
+                this.props.setUser(response.data.access_token);
                 // let item = this.storeItem('token', response.data.access_token);
                 AsyncStorage.setItem('token',''+response.data.access_token)
                 Toast.show({
@@ -47,6 +47,7 @@ class SignIn extends Component {
                     }else{
                         this.props.navigation.navigate('AppTeacher');
                     }
+                    this.props.setUser(response.data);
                 });
                 this.setState({
                     isSigningIn: false

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, AsyncStorage } from 'react-native';
-import { Icon, Form, Item, Picker, DatePicker, Button, Toast } from 'native-base';
+import { Container, Header, Left, Body, Right, Title, Icon, Form, Item, Picker, DatePicker, Button, Toast } from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
@@ -97,6 +97,30 @@ export default class CalendarSearch extends Component {
     }
     render() {
         return (
+            <Container>
+                <Header hasTabs noShadow
+                        style={{ backgroundColor: Color.mainColor }}
+                        androidStatusBarColor={Color.mainColor}>
+                    <Left>
+                        {
+                            <Button transparent onPress={ () =>  this.props.navigation.openDrawer() } >
+                                <Icon name='menu' />
+                            </Button>
+                        }
+                    </Left>
+
+                    <Body>
+                        <Title>Home</Title>
+                    </Body>
+
+                    <Right>
+
+                    <TouchableOpacity>
+                            <Icon style={styles.butt} name='md-search' onPress={ () => this.props.navigation.navigate('Search')}/>                         
+                    </TouchableOpacity>
+
+                    </Right>
+                </Header>
             <Agenda
                 // the list of items that have to be displayed in agenda. If you want to render item as empty date
                 // the value of date key kas to be an empty array []. If there exists no value for date key it is
@@ -147,16 +171,18 @@ export default class CalendarSearch extends Component {
                 // agenda container style
                 style={{}}
             />
+            </Container>
 
         );
     }
 
     renderItem(item) {
         return (
-            <TouchableOpacity style={[styles.item, {height:100}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
+            <TouchableOpacity style={[styles.item, {height:110}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
                 <Text style={styles.itemTxt}>{item.title}</Text>
                 <Text style={styles.itemTxt}>{item.subject}</Text>
-                <Text style={styles.itemTxtDate}>{item.start_duration}</Text>
+                <Text style={styles.itemTxt}>{item.user.name}</Text>
+                <Text style={styles.itemTxtDate}>{item.start_time} To {item.end_time}</Text>
                 <Image source={require('../../../images/idea.png')} style={{position: 'absolute', right: 20, top: 20, borderRadius:50, width: 50, height:50}}/>
             </TouchableOpacity>
         );
@@ -180,6 +206,11 @@ const styles = StyleSheet.create({
         flex:1,
         padding: 10,
         fontFamily: "Roboto",
+    },
+    butt:{
+        padding: 7,
+        color: '#fff',
+        fontSize: 23
     },
     dateStyle:{
         fontSize: 25,

@@ -17,27 +17,6 @@ class Teacher extends Component {
         }
     }
 
-    componentDidMount(){
-        this.setState({
-            isLoading: true
-        })
-        return AsyncStorage.getItem('token').then(userToken => {
-            return axios.get(Server.url + 'api/lectures?token='+userToken)
-            .then(response => {
-                this.setState({
-                    isLoading: false,
-                    showLectures: response.data
-                })
-            }).catch(error => {
-                Toast.show({
-                    text: 'Error reachig server',
-                    buttonText: "Ok",
-                    type: "danger"
-                })
-            })
-        })
-    }
-
     render() {
         return (
             <AppTemplate fab navigation={this.props.navigation} title="Home">
@@ -63,7 +42,7 @@ class Teacher extends Component {
                         ListEmptyComponent={
                             <Text style={{alignItems: "center", justifyContent: "center", flex: 1, textAlign: "center"}}>Your profile is empty start adding lectures</Text>
                         }
-                        data={this.state.showLectures}
+                        data={this.props.user.lecture}
                         renderItem={({item}) => (
                         
                             <Item style={styles.item} onPress={()=>this.props.navigation.navigate('Lectures', {...item})}>
@@ -73,7 +52,8 @@ class Teacher extends Component {
                                 <View>
                                     <Text style={styles.txt}>Title: {item.title}</Text>
                                     <Text style={styles.txt}>Subject: {item.subject}</Text>
-                                    <Text style={styles.txt}>Date: {item.start_duration}</Text>
+                                    <Text style={styles.txt}>Date: {item.start_date}</Text>
+                                    <Text style={styles.txt}>Duration: {item.start_time}</Text>
                                 </View>
                             </Item>
                     )}

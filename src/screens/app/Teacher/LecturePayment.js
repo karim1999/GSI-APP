@@ -12,6 +12,7 @@ export default class LecturePayment extends Component {
             title: this.props.navigation.state.params.title,
             lecture: this.props.navigation.state.params.joint_users,
             searchLectures: this.props.navigation.state.params.joint_users,
+            price: this.props.navigation.state.params.price,
             student: "",
             random:['#d93232', '#636c8f', '#6c856c', '#fbaf5d'],            
         }
@@ -110,12 +111,12 @@ export default class LecturePayment extends Component {
                                 </Body>
                                  <Right>
                                     {
-                                        ((this.state.lecture.price - item.pivot.amount) == 0 ) ? 
+                                        ((this.state.price - item.pivot.amount) == 0 ) ? 
                                         (
                                             <Label style={styles.font}>None</Label>
                                         ):
                                         (
-                                            <Label style={styles.font}>{this.state.lecture.price - item.pivot.amount}$</Label>
+                                            <Label style={styles.font}>{this.state.price - item.pivot.amount}$</Label>
                                         )
                                     }
                                 </Right>

@@ -5,6 +5,8 @@ import Notifications from "../screens/app/Notifications";
 import ResultSearch from "../screens/app/Search/ResultSearch";
 import CalendarSearch from "../screens/app/Search/CalendarSearch";
 import Students from "../screens/app/Students";
+import SettingsStudent from "../screens/app/Students/SettingsStudent";
+import ProfileInfo from "../screens/app/Students/ProfileInfo";
 import Reports from "../screens/app/Students/Reports";
 import LectureStudent from "../screens/app/Lectures";
 import WeebView from "../screens/app/Lectures/WebView";
@@ -16,7 +18,8 @@ const StudentStack = createStackNavigator({
     CalendarSearch,
     ResultSearch,
     LectureStudent,
-    WeebView
+    WeebView,
+    ProfileInfo
 },{
     headerMode: 'none',
 });
@@ -36,17 +39,18 @@ const ReportsStack = createStackNavigator({
     headerMode: 'none',
 });
 
-// const SearchStack = createStackNavigator({
-//     Search,
-// },{
-//     headerMode: 'none',
-// });
+const SettingsStudentStack = createStackNavigator({
+    SettingsStudent,
+},{
+    headerMode: 'none',
+});
 
 const AppStackStudent = createMaterialTopTabNavigator (
     {
         StudentStack,
         NotificationsStack,
         ReportsStack,
+        SettingsStudentStack
     },
     {
         navigationOptions: ({ navigation }) => ({
@@ -61,9 +65,9 @@ const AppStackStudent = createMaterialTopTabNavigator (
                 else if (routeName === 'ReportsStack') {
                     return <Icon name='news' style={{color: tintColor, fontSize: 30}} type="Entypo" />
                 }
-                // else if (routeName === 'SearchStack') {
-                //     return <Icon name='settings' style={{color: tintColor, fontSize: 25}} type="Feather" />
-                // }
+                else if (routeName === 'SettingsStudentStack') {
+                    return <Icon name='settings' style={{color: tintColor, fontSize: 25}} type="Ionicons" />
+                }
             },
             tabBarLabel: ({ focused, tintColor }) => {
                 const { routeName } = navigation.state;
@@ -77,9 +81,9 @@ const AppStackStudent = createMaterialTopTabNavigator (
                   case 'ReportsStack':
                       return <Text style={{color: tintColor, fontSize: 12}}>Reports</Text>;
                       break;
-                //   case 'SearchStack':
-                //     return <Text style={{color: tintColor, fontSize: 12}}>Settings</Text>;
-                //     break;
+                  case 'SettingsStudentStack':
+                    return <Text style={{color: tintColor, fontSize: 12}}>Settings</Text>;
+                    break;
         
         
                 }
