@@ -4,9 +4,8 @@ import {Icon, Text} from "native-base";
 import Notifications from "../screens/app/Notifications";
 import ResultSearch from "../screens/app/Search/ResultSearch";
 import CalendarSearch from "../screens/app/Search/CalendarSearch";
-import Students from "../screens/app/Students";
 import SettingsStudent from "../screens/app/Students/SettingsStudent";
-import ProfileInfo from "../screens/app/Students/ProfileInfo";
+import ProfileInfoStudent from "../screens/app/Students/ProfileInfoStudent";
 import Reports from "../screens/app/Students/Reports";
 import LectureStudent from "../screens/app/Lectures";
 import WeebView from "../screens/app/Lectures/WebView";
@@ -19,7 +18,7 @@ const StudentStack = createStackNavigator({
     ResultSearch,
     LectureStudent,
     WeebView,
-    ProfileInfo
+    ProfileInfoStudent
 },{
     headerMode: 'none',
 });

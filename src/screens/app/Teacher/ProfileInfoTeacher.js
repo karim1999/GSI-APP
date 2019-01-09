@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
-import {Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body, H3} from 'native-base';
+import {Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body,Item, H3} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";
 import {connect} from "react-redux";
@@ -9,7 +9,7 @@ import axios from "axios";
 import Color from "../../../constants/colors";
 import _ from "lodash";
 
-class ProfileInfo extends Component {
+class ProfileInfoTeacher extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -55,14 +55,42 @@ class ProfileInfo extends Component {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Profile info">
                         <View style={{ backgroundColor: "#f5f5f5", padding: 15, paddingLeft: 10, paddingRight: 10, paddingTop: 120}}>
-                            <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                            <Image source={require('../../../images/bg.jpg')} style={styles.image}/>
                             <View style={{flex: 1, backgroundColor: "white", paddingTop: 120}}>
                                 <View style={styles.trainer}>
-                                    <Text style={styles.trainerH3}>{this.props.user.name}</Text>
+                                    <Text style={styles.trainerH3}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
 
-                                    <Text note style={styles.trainerH4}>Student</Text>
+                                    <Text note style={styles.trainerH4}>Teacher</Text>
 
                                 </View>
+
+                                <Item style={styles.item2}>
+                                    <Icon type="FontAwesome" name="transgender" />
+                                    <Text style={styles.lectureTxt}>Gender</Text>
+                                    <View style={{ position: 'absolute',left: 260,fontFamily: "Roboto",}}>
+                                        {
+                                            (this.props.user.gender == 1) ? (
+                                                <Text style={{color: '#b7b3b3', }}>
+                                                    Male
+                                                </Text>
+                                            ):(
+                                                <Text style={{color: '#b7b3b3', }}>
+                                                    Female
+                                                </Text>
+                                            )
+                                        }
+                                    </View>
+                                </Item>
+
+                                
+                                <Item style={styles.item2}>
+                                    <Icon type="FontAwesome" name="navicon" />
+                                    <Text style={styles.lectureTxt}>Lectures</Text>
+                                    <View style={{ position: 'absolute',left: 275,fontFamily: "Roboto",}}>
+                                        <Text style={{color: '#b7b3b3', }}> {this.props.user.lecture.length} </Text>
+                                    </View>
+                                </Item>
+
                             </View>
                         </View>
 
@@ -72,6 +100,10 @@ class ProfileInfo extends Component {
 }
 
 const styles = StyleSheet.create({
+    item2:{
+        height: 70, 
+        padding: 10
+    },
     trainer:{
         alignSelf: 'center'
     },
@@ -187,4 +219,4 @@ const mapDispatchToProps = {
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(ProfileInfo);
+)(ProfileInfoTeacher);

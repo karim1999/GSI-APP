@@ -7,6 +7,7 @@ import EditLecture from "../screens/app/Lectures/EditLecture";
 import LecturePayment from "../screens/app/Teacher/LecturePayment";
 import Teacher from "../screens/app/Teacher";
 import SettingsTeacher from "../screens/app/Teacher/SettingsTeacher";
+import ProfileInfoTeacher from "../screens/app/Teacher/ProfileInfoTeacher";
 import Payments from "../screens/app/Teacher/Payments";
 import Wallet from "../screens/app/Teacher/Wallet";
 import Color from "../constants/colors";
@@ -17,6 +18,7 @@ const TeacherStack = createStackNavigator({
     AddLecture,
     EditLecture,
     Lectures,
+    ProfileInfoTeacher
 },{
     headerMode: 'none',
 });

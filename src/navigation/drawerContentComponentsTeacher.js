@@ -37,25 +37,31 @@ class drawerContentComponentsTeacher extends Component {
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('Teacher')}>
                     <Image source={require('../images/home.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Home</Text>
-                    <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('Wallet')}>
                     <Image source={require('../images/wallet.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Wallet</Text>
-                    <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('Payments')}>
                     <Image source={require('../images/payment.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Payments</Text>
-                    <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('ProfileInfoTeacher')}>
+                    <Image source={require('../images/reports.png')} style={{width: 25, height: 25, marginRight: 20}} />
+                    <Text>Profile</Text>
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.screenStyle} onPress={() => this.logout()}>
                     <Image source={require('../images/logout.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Logout</Text>
-                    <Icon name = 'chevron-right' type = 'Feather' style={{position: 'absolute', right: 0}} />
+                    <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>
                 
             </View>

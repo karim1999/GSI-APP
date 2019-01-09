@@ -17,7 +17,6 @@ export default class SameItems extends Component {
                             <Text style={styles.txt}>prof. Tim</Text>
                             <Text style={styles.txt}>programming</Text>
                             <Text style={styles.txt}>Date: 20/11/2018</Text>
-                            <Text style={styles.txt}>Due date: 20/11/2018</Text>
                             <Text style={styles.txt}>Time: 11:00 To 13:00</Text>
                         </View>
                     </Item>
@@ -30,7 +29,6 @@ export default class SameItems extends Component {
                             <Text style={styles.txt}>prof. Tim</Text>
                             <Text style={styles.txt}>programming</Text>
                             <Text style={styles.txt}>Date: 20/11/2018</Text>
-                            <Text style={styles.txt}>Due date: 20/11/2018</Text>
                             <Text style={styles.txt}>Time: 11:00 To 13:00</Text>
                         </View>
                     </Item>

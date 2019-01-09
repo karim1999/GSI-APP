@@ -33,12 +33,11 @@ export default class AddLecture extends Component {
         this.state = {
             isLoading: false,
             title: "",
-            subject: "",
             price: 0,
-            payment: "",
-            type_course: "",
-            gender: "",
-            allowed: "",
+            payment: 2,
+            type_course: 1,
+            gender: 3,
+            allowed: 30,
             img: "",
             description: "",
             start_date: " Start Date",
@@ -217,7 +216,7 @@ export default class AddLecture extends Component {
         this.setState({
             isLoading: true
         });
-            if(this.state.title == "" || this.state.subject == "" || this.state.type_course == "" || 
+            if(this.state.title == "" || this.state.type_course == "" || 
             this.state.gender == "" || this.state.allowed == ""  || this.state.description == "" || 
             this.state.start_date == "" || this.state.end_date == "" || this.state.start_time == "" ||
             this.state.end_time == ""){
@@ -238,7 +237,6 @@ export default class AddLecture extends Component {
                     end_duration = this.state.end_date+" "+this.state.end_time;
                     // duration_date = start_duration.split(" ")[0];
                     data.append('title', this.state.title);
-                    data.append('subject', this.state.subject);
                     data.append('payment', this.state.payment);
                     data.append('type_course', this.state.type_course);
                     data.append('gender', this.state.gender);
@@ -349,16 +347,6 @@ export default class AddLecture extends Component {
                                    placeholder="ex: Quantum mechanics..."
                                    placeholderTextColor="#ccc5c5"
                                    style={{color: '#9e9797', paddingLeft: 45}}
-                            />
-                        </Item>
-
-                        <Item style={{height: 70}}>
-                            <Icon type="MaterialIcons" name='subject' style={{fontSize:22}} />
-                            <Text style={styles.font}>Subject </Text>
-                            <Input onChangeText={(subject) => this.setState({subject})}
-                                   placeholder="ex: Physics..."
-                                   placeholderTextColor="#ccc5c5"
-                                   style={{color: '#9e9797', paddingLeft: 25}}
                             />
                         </Item>
                         
@@ -508,6 +496,7 @@ export default class AddLecture extends Component {
                             <Text style={styles.font}>Students </Text>
                             <Input onChangeText={(allowed) => this.setState({allowed})}
                                     keyboardType='numeric'
+                                    value= {`${this.state.allowed}`}
                                     placeholder="ex:150 student..."
                                     placeholderTextColor="#ccc5c5"
                             />

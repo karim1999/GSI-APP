@@ -51,7 +51,6 @@ class Teacher extends Component {
                                 </View>
                                 <View>
                                     <Text style={styles.txt}>Title: {item.title}</Text>
-                                    <Text style={styles.txt}>Subject: {item.subject}</Text>
                                     <Text style={styles.txt}>Date: {item.start_date}</Text>
                                     <Text style={styles.txt}>Duration: {item.start_time}</Text>
                                 </View>

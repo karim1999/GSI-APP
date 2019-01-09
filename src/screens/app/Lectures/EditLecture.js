@@ -32,7 +32,6 @@ export default class EditLecture extends Component {
         this.state = {
             id: this.props.navigation.state.params.id,
             title: this.props.navigation.state.params.title,
-            subject: this.props.navigation.state.params.subject,
             price: this.props.navigation.state.params.price,
             payment: this.props.navigation.state.params.payment,
             type_course: this.props.navigation.state.params.type_course,
@@ -132,7 +131,6 @@ export default class EditLecture extends Component {
             start_duration = this.state.start_date+" "+this.state.start_time;
             end_duration = this.state.end_date+" "+this.state.end_time;
             data.append('title', this.state.title);
-            data.append('subject', this.state.subject);
             data.append('price', this.state.price);
             data.append('end_date', this.state.end_date);
             data.append('start_duration', start_duration);
@@ -226,17 +224,6 @@ export default class EditLecture extends Component {
                                    placeholderTextColor="#ccc5c5"
                                    value={this.state.title}
                                    style={{color: '#9e9797', paddingLeft: 45}}
-                            />
-                        </Item>
-
-                        <Item style={{height: 70}}>
-                            <Icon type="MaterialIcons" name='subject' style={{fontSize:22}} />
-                            <Text style={styles.font}>Subject </Text>
-                            <Input onChangeText={(subject) => this.setState({subject})}
-                                   placeholder="ex: Physics..."
-                                   placeholderTextColor="#ccc5c5"
-                                   value={this.state.subject}
-                                   style={{color: '#9e9797', paddingLeft: 25}}
                             />
                         </Item>
 

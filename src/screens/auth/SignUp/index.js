@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import {Container, Content, Form, Item, Button, Input, Toast} from 'native-base';
-
+import PhoneInput from 'react-native-phone-input'
 
 export default class SignUp extends Component {
     constructor(props){
@@ -33,6 +33,7 @@ export default class SignUp extends Component {
                 phone: this.state.phone, type: this.state.type.type,})
          }
     }
+    
 
     render() {
         return (
@@ -42,17 +43,17 @@ export default class SignUp extends Component {
                 <View style={styles.list}>
                     <Form>
                         <Item style={styles.margin}>
-                            <Input placeholder="First Name" placeholderTextColor= "#d9cdb7" style={styles.input}
+                            <Input placeholder="First Name (In Arabic)" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({name: val})}/>
                         </Item>
 
                         <Item style={styles.margin}>
-                            <Input placeholder="Middle Name" placeholderTextColor= "#d9cdb7" style={styles.input}
+                            <Input placeholder="Middle Name (In Arabic)" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({middleName: val})}/>
                         </Item>
 
                         <Item style={styles.margin}>
-                            <Input placeholder="Last Name" placeholderTextColor= "#d9cdb7" style={styles.input}
+                            <Input placeholder="Last Name (In Arabic)" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({lastName: val})}/>
                         </Item>
 
@@ -66,10 +67,14 @@ export default class SignUp extends Component {
                                 onChangeText={(val) => this.setState({password: val})}/>
                         </Item>
 
-                        <Item style={styles.margin}>
-                            <Input placeholder="Number" keyboardType='numeric' placeholderTextColor= "#d9cdb7" style={styles.input}
-                                onChangeText={(val) => this.setState({phone: val})}/>
-                        </Item>
+                        <View style={styles.margin}>
+                            <PhoneInput
+                                textStyle={{color: '#fff'}}	
+                                ref={(ref) => { this.phone = ref; }}
+                                onChangePhoneNumber={(val) => this.setState({phone: val})}
+                            />
+                        </View>
+
 
                         <Button style={styles.button} onPress={() => this.nextRegisterPressed()}>
                             <Text style={styles.buttonTxt}>Next</Text>
@@ -84,8 +89,8 @@ export default class SignUp extends Component {
 
 const styles = StyleSheet.create({
   logo:{
-    width: '50%', 
-    height: '50%', 
+    width: '20%', 
+    height: '20%', 
     justifyContent: 'center', 
     alignSelf: 'center'
   },

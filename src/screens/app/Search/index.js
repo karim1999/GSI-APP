@@ -16,7 +16,6 @@ export default class Search extends Component {
             showLectures: [],
             isLoading: false,
             title: "",
-            subject: "",
             teacher: "",
             isStartTimeVisible: false,
             isEndTimeVisible: false,
@@ -77,9 +76,9 @@ export default class Search extends Component {
               data = await _.filter(data, lecture => lecture.title.toLowerCase().indexOf(this.state.title.toLowerCase()) > -1);
           }
 
-          if(this.state.subject != ""){
-              data = await _.filter(data, lecture => lecture.subject.toLowerCase().indexOf(this.state.subject.toLowerCase()) > -1);
-          }
+        //   if(this.state.subject != ""){
+        //       data = await _.filter(data, lecture => lecture.subject.toLowerCase().indexOf(this.state.subject.toLowerCase()) > -1);
+        //   }
 
           if(this.state.teacher !== ""){
             data = await _.filter(data, lecture => lecture.user.name == this.state.teacher);
@@ -145,15 +144,6 @@ export default class Search extends Component {
 
                     <Item style={styles.lecture}>
                         <Icon type="Foundation" name="results" />
-                        <Text style={styles.lectureTxt}>Subject</Text>
-                        <Input onChangeText={(subject) => this.setState({subject})}
-                                placeholder="Subject name"
-                                placeholderTextColor="#ccc5c5"
-                        />
-                    </Item>
-
-                    <Item style={styles.lecture}>
-                        <Icon type="Foundation" name="results" />
                         <Text style={styles.lectureTxt}>Teacher</Text>
                         <Input onChangeText={(teacher) => this.setState({teacher})}
                                 placeholder="Teacher name"
@@ -179,7 +169,6 @@ export default class Search extends Component {
                                     </View>
                                     <View>
                                         <Text style={styles.txt}>{item.title}</Text>
-                                        <Text style={styles.txt}>{item.subject}</Text>
                                         <Text style={styles.txt}>{item.user.name}</Text>
                                         <Text style={styles.txt}>{item.start_duration}</Text>
                                     </View>

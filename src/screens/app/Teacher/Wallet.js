@@ -121,7 +121,7 @@ export default class Wallet extends Component {
                                     <Item style={{height: 45}}>
                                         <Image source={require('../../../images/calendar_131786.png')} style={styles.image}/>
                                         <Label style={styles.font}>Date </Label>
-                                        <Text style={styles.right}>{item.start_duration} </Text>
+                                        <Text style={styles.right}>{item.start_date} </Text>
                                     </Item>
                                 </View>
 
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     price2:{
-        marginLeft: 140
+        marginLeft: 120
     },
     right:{
         marginLeft: 125,

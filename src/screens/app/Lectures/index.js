@@ -313,35 +313,35 @@ class Lectures extends Component {
                         <Item style={styles.item2}>
                             <Icon type="Entypo" name="wallet" />
                             <H3 style={styles.lectureTxt}>Payment</H3>
-                            <Text style={{position: 'absolute',left: 200,fontFamily: "Roboto",}}>
+                            <View style={{position: 'absolute',left: 200,fontFamily: "Roboto",}}>
                             {
                                 (this.state.lecture.payment == 1) ? (
-                                    <Text style={{position: 'absolute',left: 100,fontFamily: "Roboto",}}>
+                                    <Text>
                                         Before Attend
                                     </Text>
 
                                 ):(
-                                    <Text style={{position: 'absolute',left: 100,fontFamily: "Roboto",}}>
+                                    <Text>
                                         After Attend
                                     </Text>
                                 )
                             }
-                            </Text>
+                            </View>
                             
                         </Item>
 
                         <Item style={styles.item2}>
                             <Icon type="Foundation" name="results" />
                             <H3 style={styles.lectureTxt}>Course Type</H3>
-                            <View style={{justifyContent: 'space-between',  alignItems: 'flex-end'}}>
+                            <View style={{position: 'absolute',left: 230,fontFamily: "Roboto",}}>
                             {
                                 (this.state.lecture.type_course == 1) ? (
-                                    <Text style={{position: 'absolute',left: 100,fontFamily: "Roboto",}}>
+                                    <Text>
                                         College
                                     </Text>
 
                                 ):(
-                                    <Text style={{position: 'absolute',left: 100,fontFamily: "Roboto",}}>
+                                    <Text>
                                         Genral
                                     </Text>
                                 )

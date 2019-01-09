@@ -87,7 +87,7 @@ class SignIn extends Component {
                                 onChangeText={(val) => this.setState({email: val})}/>
                         </Item>
 
-                        <Item last>
+                        <Item>
                             <Input secureTextEntry={true} placeholder="Password" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({password: val})}/>
                         </Item>
@@ -154,6 +154,9 @@ const styles = StyleSheet.create({
       fontSize: 16,
       marginTop: 10,
       fontFamily: "Roboto",
+      justifyContent: 'center', 
+      alignSelf: 'center'
+      
   },
   registerButton:{
     color: '#d9cdb7',

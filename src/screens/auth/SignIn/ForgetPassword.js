@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity,ImageBackground, ActivityIndicator } from 'react-native';
-import {Form, Item, Input, Button, Toast} from 'native-base';
+import { Content, Form, Item, Input, Button, Toast} from 'native-base';
 import Colors from "../../../constants/colors";
 import Server from "../../../constants/config"
 import axios from "axios";
@@ -26,7 +26,7 @@ export default class ForgetPassword extends Component {
                 isResetPassword:true
             });
 
-        return axios.post(Server.url+'api/auth/password/reset',{
+        return axios.post(Server.url+'api/password/reset',{
 
             email: this.state.email
             
@@ -40,78 +40,94 @@ export default class ForgetPassword extends Component {
                 isResetPassword: false
             });
         }).catch(error => {
-            let text= "No Internet Connection.";
-            if(error.response.status == 401 && error.response.data.error &&  error.response.data.error.email){
                 if(error.response.data.error.email){
-                    text= error.response.data.error.email[0];
+                    Toast.show({
+                        text: error.response.data.error.email,
+                        type: 'danger',
+                        buttonText: 'Okay'
+                    });
+                    this.setState({
+                        isResetPassword: false
+                    });
                 }
-            }
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
-            this.setState({
-                isResetPassword: false
-            });
         });
         }
     }
 
     render() {
         return (
-            <Form>
                 <ImageBackground style={{width: '100%', height: '100%'}} source={require('../../../images/bg.jpg')}>
                     <Image 
                     source={require('../../../images/LightenedLogo.png')}
-                     style={{height: 300, width: 300,alignSelf: 'center', }}
+                     style={styles.logo}
                     />
-                    <Item rounded style={styles.input}>
-                        <Input style={styles.inputText} placeholder="Email" placeholderTextColor="#fff"
+                    <Content>
+                    <View style={styles.list}>
+                    <Form>
+                        <Item>
+                            <Input placeholder="Email" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({email: val})}/>
-                    </Item>
-                    <Button info style={styles.button} onPress={()=>this.onResetPasswordPressed()}>
-                    <Text style={styles.buttonText}> Send Password Reset Link </Text>
-                    {this.state.isResetPassword && (
-                        <ActivityIndicator style={{}} size="small" color="#000000" />
-                    )}
-                    </Button>
+                        </Item>
+
+                        <Button style={styles.button} onPress={ () => this.onResetPasswordPressed()} >
+                            <Text style={styles.buttonTxt}> Reset Password </Text>
+                            {this.state.isResetPassword && (
+                            <ActivityIndicator style={{}} size="small" color="#000000" />
+                            )}
+                        </Button>
+                    </Form>
                     <TouchableOpacity style={{alignItems: 'center',}} onPress={()=> this.props.navigation.navigate('SignIn')}>
                         <Text style={styles.loginButton}>Back to login?</Text>
                     </TouchableOpacity>
+
+                </View>
+                </Content>
                 </ImageBackground>
-            </Form>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    input:{
-        width: 300,
-        marginBottom: 10,
-        padding: 10,
-        height: 40,
+    logo:{
+        width: '50%', 
+        height: '50%', 
+        justifyContent: 'center', 
+        alignSelf: 'center'
+      },
+      list:{
+        flex: 1,
         alignSelf: 'center',
-    },
-    inputText:{
-        color: '#fff',
-        fontSize: 16
-    },
-    button:{
-        alignSelf: 'center',
-        borderRadius: 25,
-        paddingLeft: 40,
-        paddingRight: 40
-    },
-    buttonText:{
-        fontSize: 16,
-        fontWeight: '500',
+        justifyContent: 'center',
+        width: '70%',
+        paddingBottom: 200
+      },
+      input:{
         color: '#fff',
         textAlign: 'center',
-    },
-    loginButton:{
-        color: '#d9cdb7',
-        fontSize: 16,
         fontFamily: "Roboto",
-    }
+      },
+      button:{
+        backgroundColor: '#37446e',
+        paddingTop: 10,
+        paddingBottom: 10,
+        padding: 70,
+        borderRadius: 10,
+        marginTop: 20,
+        justifyContent: 'center',
+        alignSelf: 'center',
+      },
+      buttonTxt:{
+        color: '#d9cdb7',
+        fontFamily: "Roboto",
+        textAlign: 'center'
+      },
+     loginButton:{
+      color: '#d9cdb7',
+      fontSize: 16,
+      marginTop: 10,
+      fontFamily: "Roboto",
+      justifyContent: 'center', 
+      alignSelf: 'center'
+      
+  },
 });

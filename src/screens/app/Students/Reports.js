@@ -16,7 +16,6 @@ class Reports extends Component {
             start_duration: " Start Time",
             end_duration: " End Time",
             title: "",
-            subject: "",
             searchLectures: this.props.user.joint_lectures
          };
       }
@@ -49,9 +48,9 @@ class Reports extends Component {
               data = await _.filter(data, lecture => lecture.title.toLowerCase().indexOf(this.state.title.toLowerCase()) > -1);
           }
 
-          if(this.state.subject != ""){
-              data = await _.filter(data, lecture => lecture.subject.toLowerCase().indexOf(this.state.subject.toLowerCase()) > -1);
-          }
+        //   if(this.state.subject != ""){
+        //       data = await _.filter(data, lecture => lecture.subject.toLowerCase().indexOf(this.state.subject.toLowerCase()) > -1);
+        //   }
 
         this.setState({
             searchLectures: data
@@ -103,15 +102,6 @@ class Reports extends Component {
                       </View>
                     </Item> */}
 
-                    <Item style={styles.lecture}>
-                        <Icon type="Foundation" name="results" />
-                        <Text style={styles.lectureTxt}>Subject</Text>
-                        <Input onChangeText={(subject) => this.setState({subject})}
-                                placeholder="Subject name"
-                                placeholderTextColor="#ccc5c5"
-                        />
-                    </Item>
-
                     <Button style={styles.button} onPress={ () => this.Data()}>
                         <Text style={styles.buttonTxt}>Search</Text>
                     </Button>
@@ -140,15 +130,14 @@ class Reports extends Component {
                                     </View>
 
                                     <View style={{flexDirection: 'row', paddingBottom: 7}}>
-                                        <Icon type="Foundation" name="results" />
-                                        <Text style={styles.txt}>{item.subject}</Text>
+                                        <Icon type="Entypo" name="calendar" />
+                                        <Text style={styles.txt}>{item.start_date}</Text>
                                     </View>
 
                                     <View style={{flexDirection: 'row'}}>
-                                        <Icon type="Ionicons" name="ios-list-box" />
-                                        <Text style={styles.txt}>{item.start_duration}</Text>
+                                        <Icon type="Entypo" name="back-in-time" />
+                                        <Text style={styles.txt}>{item.start_time}</Text>
                                     </View>
-
                                 </View>
                             </Item>
                         </View>
