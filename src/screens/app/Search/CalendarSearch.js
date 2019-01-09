@@ -147,7 +147,7 @@ export default class CalendarSearch extends Component {
                 // specify how empty date content with no items should be rendered
                 renderEmptyDate={() => {return (<Text>This is empty date!</Text>);}}
                 // specify how agenda knob should look like
-                renderKnob={() => {return (<Icon type="Ionicons" name="ios-arrow-dropdown-circle"/>);}}
+                renderKnob={() => {return (<Icon type="MaterialIcons" name="keyboard-arrow-down"/>);}}
                 // specify what should be rendered instead of ActivityIndicator
                 renderEmptyData = {() => {return (<Text style={styles.emptyDate}>This is empty date!</Text>);}}
                 // specify your item comparison function for increased performance
@@ -179,8 +179,8 @@ export default class CalendarSearch extends Component {
     renderItem(item) {
         return (
             <TouchableOpacity style={[styles.item, {height:90}]}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
-                <Text style={styles.itemTxt}>{item.title}</Text>
-                <Text style={styles.itemTxt}>{item.user.name}</Text>
+                <Text style={styles.itemTxt}>Title: {item.title}</Text>
+                <Text style={styles.itemTxt}>Teacher: {item.user.name}</Text>
                 <Text style={styles.itemTxtDate}>{item.start_time} To {item.end_time}</Text>
                 <Image source={require('../../../images/idea.png')} style={{position: 'absolute', right: 20, top: 20, borderRadius:50, width: 50, height:50}}/>
             </TouchableOpacity>

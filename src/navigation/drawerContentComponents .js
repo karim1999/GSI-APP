@@ -27,10 +27,12 @@ class drawerContentComponents extends Component {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={{flex: 1, width: 280, justifyContent: 'center', backgroundColor: '#c0bfb4'}} >
+                    <TouchableOpacity onPress={this.navigateToScreen('ProfileInfoStudent')}>
                     <Image source={require('../images/bg.jpg')}
                         style={{width: 45, height: 45, borderRadius: 30, position: 'absolute', right: 20 }} />
                         <Text style={styles.headerText}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
                         <Text style={styles.headerText}>Student</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
             <View style={styles.screenContainer}>
@@ -53,7 +55,7 @@ class drawerContentComponents extends Component {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.screenStyle} onPress={this.navigateToScreen('ProfileInfoStudent')}>
-                    <Image source={require('../images/reports.png')} style={{width: 25, height: 25, marginRight: 20}} />
+                    <Image source={require('../images/No-headshot.png')} style={{width: 25, height: 25, marginRight: 20}} />
                     <Text>Profile</Text>
                     <Icon name = 'ios-arrow-forward' type = 'Ionicons' style={{position: 'absolute', right: 0}} />
                 </TouchableOpacity>

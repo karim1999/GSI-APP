@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking } from 'react-native';
 import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body, 
     Right, Thumbnail, Card, CardItem, Toast, Textarea, H3} from 'native-base';
 import Color from '../../../constants/colors';
@@ -23,7 +23,8 @@ class Lectures extends Component {
             editable: 1,
             isCommented: false,
             rate: 1,
-            showComment: []
+            showComment: [],
+            url: Server.url+'/privacy'
 
         };
         this.setDate = this.setDate.bind(this);
@@ -33,29 +34,84 @@ class Lectures extends Component {
       }
 
     onRegisterPressed(){
-        this.setState({
-            isLoading: true
-        });
-        return AsyncStorage.getItem('token').then(userToken => {
-            return axios.post(Server.url + 'api/jointLecture/'+this.state.lecture.id+'?token='+userToken)
-            .then(response => {
-                this.setState({
-                    isLoading: false,
-                });
-                this.setUser(response.data);
-                Toast.show({
-                    text: "done.",
-                    buttonText: "Ok",
-                    type: "success"
-                })
-            }).catch(error => {
-                alert(JSON.stringify(error))
-            })
-        }).then(() => {
-            this.setState({
-                isLoading: false
-            });
-        });
+        Alert.alert(
+            "Are you sure?",
+            "You want to pay now or later",
+            [
+                { text: "Now", onPress: () =>  this.props.navigation.navigate('WeebView', {...this.state.lecture}) },
+                {text: "Later", onPress: () => {
+                    
+                    this.setState({
+                        isLoading: true
+                    });
+                    return AsyncStorage.getItem('token').then(userToken => {
+                        return axios.post(Server.url + 'api/jointLecture/'+this.state.lecture.id+'?token='+userToken)
+                        .then(response => {
+                            this.setState({
+                                isLoading: false,
+                            });
+                            Toast.show({
+                                text: "done.",
+                                buttonText: "Ok",
+                                type: "success"
+                            })
+                            this.props.setUser(response.data);
+                            this.props.navigation.navigate('CalendarSearch');
+                        }).catch(error => {
+                            //alert(JSON.stringify(error))
+                            
+                        })
+                    }).then(() => {
+                        this.setState({
+                            isLoading: false
+                        });
+                    });
+
+                }}
+                
+            ]
+        )
+    }
+
+    unJoin(){
+        Alert.alert(
+            "Are you sure?",
+            "you want to un join lecture",
+            [
+                {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
+                {text: "Ok", onPress: () => {
+                        this.setState({
+                            isDeleting: true,
+                        });
+                        AsyncStorage.getItem('token').then(userToken => {
+                            return axios.post(Server.url + 'api/unjoint/'+this.state.lecture.id+'?token='+userToken)
+                            .then(response => {
+                                // alert(response.data);
+                                this.props.setUser(response.data);
+                                this.props.navigation.navigate('CalendarSearch');
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Un join lecture successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                })
+                            }).catch(error => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Unknown error has occurred",
+                                    buttonText: "Ok",
+                                    type: "danger"
+                                })
+                            })
+                        });
+                    }},
+            ],
+            { cancelable: false }
+        )
     }
 
     deleteLecture(){
@@ -145,6 +201,22 @@ class Lectures extends Component {
 
     }
 
+    onPayPressed()
+    {
+        Alert.alert(
+            "Are you sure",
+            "You have to pay before attend and by paying you accept our privacy&policy?",
+            [
+                {text: "Cancel", onPress: () => console.log('Cancel Pressed')},
+                { text: "pay", onPress: () =>  this.props.navigation.navigate('WeebView', {...this.state.lecture}) },
+                {text: "privacy", onPress: () => Linking.openURL(this.state.url)},
+            ],
+            { cancelable: false }
+        )
+
+        
+    }
+
     createRating(rate){
         let i;
         let stars= [];
@@ -212,13 +284,42 @@ class Lectures extends Component {
 
                 {
                     (this.props.user.type == 1) ? (
-                        _.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id) ? (
-                            <Text></Text>
+                        _.find(this.props.user.joint_lectures, lecture => lecture.id == this.state.lecture.id && 
+                            lecture.pivot.amount == 0 && lecture.pivot.type == 1) ? (
+                                    <View>
+                                    <Button onPress={() => this.setState({isSetting: !this.state.isSetting})} style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
+                                    <Text style={{flex: 1, color: '#000'}}> Settings </Text>
+                                    <Icon type="FontAwesome" name={this.state.isSetting? "arrow-circle-o-up": "arrow-circle-o-down"} style={{color: Color.mainColor, fontSize: 25}}/>
+                                    </Button>
+                                    { 
+                                        (this.state.isSetting) && (
+                                            <List style={{backgroundColor: "#d3d3ea", right: 0}}>
+                                                {
+                                                    (this.state.editable == 1) ? (
+                                                        <ListItem
+                                                            onPress={() => this.unJoin()}
+                                                        >
+                                                            <Text style={{flex: 1, color: '#000'}}>Un join</Text>
+                                                        </ListItem>
+        
+                                                    ):null
+                                                    
+                                                }
+                                                
+                                                <ListItem
+                                                    onPress={() => this.props.navigation.navigate('WeebView', {...this.state.lecture})}
+                                                >
+                                                    <Text style={{flex: 1, color: '#000'}}>Pay</Text>
+                                                </ListItem>
+                                            </List>
+                                        )
+                                    }
+                                    </View>  
                         ):(
                             (this.state.lecture.payment == 1)?(
                                 
                                 <Button
-                                onPress={() => this.props.navigation.navigate('WeebView', {...this.state.lecture})}
+                                onPress={() => this.onPayPressed()}
                                 style={{width: "100%", alignItems: "center", backgroundColor: '#d3d3ea'}}>
         
                                 <Text style={{flex: 1, paddingLeft: 10}}> Join </Text>
