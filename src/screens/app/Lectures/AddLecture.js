@@ -185,7 +185,7 @@ export default class AddLecture extends Component {
 
     selectImage(){
         let options = {
-            title: "Course Image",
+            title: "Lecture Image",
             storageOptions: {
                 skipBackup: true,
                 path: 'images'

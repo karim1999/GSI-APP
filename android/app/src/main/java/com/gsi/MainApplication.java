@@ -3,11 +3,12 @@ package com.gsi;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.imagepicker.ImagePickerPackage;
+
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.imagepicker.ImagePickerPackage;
 import com.facebook.soloader.SoLoader;
 
 import java.util.Arrays;
