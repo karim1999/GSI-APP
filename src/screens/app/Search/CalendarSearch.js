@@ -6,6 +6,7 @@ import AppTemplate from "../appTemplate";
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import Server from "../../../constants/config";
 import axios from "axios";
+import moment from 'moment'
 // import firebase from 'react-native-firebase';
 // import {  RemoteMessage, Notification } from 'react-native-firebase';
 
@@ -135,7 +136,7 @@ export default class CalendarSearch extends Component {
                 // callback that gets called when day changes while scrolling agenda list
                 onDayChange={(day)=>{console.log('day changed')}}
                 // initially selected day
-                selected={'2018-11-16'}
+                selected={moment(new Date).format('YYYY-MM-DD')}
                 // Max amount of months allowed to scroll to the past. Default = 50
                 pastScrollRange={50}
                 // Max amount of months allowed to scroll to the future. Default = 50

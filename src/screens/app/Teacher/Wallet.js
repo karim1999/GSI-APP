@@ -18,7 +18,7 @@ export default class Wallet extends Component {
             student: "",
         }
     }
-    // {firstColor: '#d93232', secondColor: '#636c8f', thirdColor: '#6c856c', fourthColor: '#fbaf5d',}
+
     componentDidMount(){
         this.setState({
             isLoading: true
@@ -109,7 +109,7 @@ export default class Wallet extends Component {
                                         <Label style={styles.font}>Paid </Label>
                                         <Button transparent style={styles.price2}>
                                             <Text style={styles.priceText}>{student.item.pivot.amount}</Text>
-                                            <Text style={styles.priceIcon}>$</Text>
+                                            <Text style={styles.priceIcon}>KWD</Text>
                                         </Button>
                                     </Item>
                                     <Item style={{height: 45}}>
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
     },
     price2:{
-        marginLeft: 120
+        marginLeft: 100
     },
     right:{
         marginLeft: 125,

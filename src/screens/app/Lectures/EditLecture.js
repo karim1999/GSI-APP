@@ -286,7 +286,7 @@ export default class EditLecture extends Component {
                         </Item>
 
                         <Item style={{height: 70}}>
-                            <Icon type="FontAwesome" name='dollar' />
+                            <Icon type="FontAwesome" name='money' />
                             <Text style={styles.font}>Price </Text>
                             <Input onChangeText={(price) => this.setState({price})}
                                     keyboardType='numeric'

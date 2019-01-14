@@ -18,7 +18,8 @@ const StudentStack = createStackNavigator({
     ResultSearch,
     LectureStudent,
     WeebView,
-    ProfileInfoStudent
+    ProfileInfoStudent,
+    Search
 },{
     headerMode: 'none',
 });
@@ -40,6 +41,7 @@ const ReportsStack = createStackNavigator({
 
 const SettingsStudentStack = createStackNavigator({
     SettingsStudent,
+    Search
 },{
     headerMode: 'none',
 });

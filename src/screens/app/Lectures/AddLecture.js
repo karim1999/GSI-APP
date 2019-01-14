@@ -40,8 +40,8 @@ export default class AddLecture extends Component {
             allowed: 30,
             img: "",
             description: "",
-            start_date: " Start Date",
-            end_date: " End Date",
+            start_date: moment(new Date).format('YYYY-MM-DD'),
+            end_date: moment(new Date).format('YYYY-MM-DD'),
             start_time: " Start Time",
             end_time: " End Time",
             selectedHours: 0,
@@ -217,9 +217,8 @@ export default class AddLecture extends Component {
             isLoading: true
         });
             if(this.state.title == "" || this.state.type_course == "" || 
-            this.state.gender == "" || this.state.allowed == ""  || this.state.description == "" || 
-            this.state.start_date == "" || this.state.end_date == "" || this.state.start_time == "" ||
-            this.state.end_time == ""){
+            this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" || 
+            this.state.end_date == "" || this.state.start_time == "" || this.state.end_time == ""){
                 Toast.show({
                     text: 'please fill out fields.',
                     type: "danger",
@@ -409,7 +408,7 @@ export default class AddLecture extends Component {
                         </Item>
 
                         <Item style={{height: 70}}>
-                            <Icon type="FontAwesome" name='dollar' />
+                            <Icon type="FontAwesome" name='money' />
                             <Label style={styles.font}>Price </Label>
                             <Input onChangeText={(price) => this.setState({price})}
                                     keyboardType='numeric'

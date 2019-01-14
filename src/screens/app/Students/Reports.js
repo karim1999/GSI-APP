@@ -130,6 +130,11 @@ class Reports extends Component {
                                     </View>
 
                                     <View style={{flexDirection: 'row', paddingBottom: 7}}>
+                                        <Icon type="MaterialIcons" name="subject" />
+                                        <Text>{item.title}</Text>
+                                    </View>
+
+                                    <View style={{flexDirection: 'row', paddingBottom: 7}}>
                                         <Icon type="Entypo" name="calendar" />
                                         <Text style={styles.txt}>{item.start_date}</Text>
                                     </View>

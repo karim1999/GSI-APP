@@ -83,7 +83,7 @@ class SignIn extends Component {
                 <View style={styles.list}>
                     <Form>
                         <Item>
-                            <Input placeholder="Email" placeholderTextColor= "#d9cdb7" style={styles.input}
+                            <Input placeholder="Email or Phone" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({email: val})}/>
                         </Item>
 

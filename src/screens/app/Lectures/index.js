@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, AsyncStorage, Alert, ActivityIndicator, Slider, Linking, TouchableHighlight, Modal } from 'react-native';
 import { Icon, Form, Item, Picker, DatePicker, Button, Label, List, ListItem, Left, Body, 
-    Right, Thumbnail, Card, CardItem, Toast, Textarea, H3} from 'native-base';
+    Right, Thumbnail, Card, CardItem, Toast, Textarea, H3, Input} from 'native-base';
 import Color from '../../../constants/colors';
 import AppTemplate from "../appTemplate";
 import axios from "axios";
@@ -17,6 +17,7 @@ class Lectures extends Component {
         this.state = { 
             chosenDate: new Date(),
             lecture: this.props.navigation.state.params ,
+            commentShows: '',
             isLoading: false,
             isSetting: false,
             isApplying: false,
@@ -24,7 +25,10 @@ class Lectures extends Component {
             isCommented: false,
             rate: 1,
             showComment: [],
-            url: Server.url+'/privacy'
+            url: Server.url+'/privacy',
+            modalVisible: false,
+            id: '',
+            comments: ''
 
         };
         this.setDate = this.setDate.bind(this);
@@ -51,15 +55,17 @@ class Lectures extends Component {
                                 isLoading: false,
                             });
                             Toast.show({
-                                text: "done.",
+                                text: "You joined lecture successfully.",
                                 buttonText: "Ok",
                                 type: "success"
                             })
                             this.props.setUser(response.data);
-                            this.props.navigation.navigate('CalendarSearch');
                         }).catch(error => {
-                            //alert(JSON.stringify(error))
-                            
+                            Toast.show({
+                                text: "Check your Internet connection.",
+                                buttonText: "Ok",
+                                type: "danger"
+                            });                            
                         })
                     }).then(() => {
                         this.setState({
@@ -88,7 +94,6 @@ class Lectures extends Component {
                             .then(response => {
                                 // alert(response.data);
                                 this.props.setUser(response.data);
-                                this.props.navigation.navigate('CalendarSearch');
                                 this.setState({
                                     isLoading: false,
                                 });
@@ -102,7 +107,7 @@ class Lectures extends Component {
                                     isLoading: false,
                                 });
                                 Toast.show({
-                                    text: "Unknown error has occurred",
+                                    text: "Check your Internet connection.",
                                     buttonText: "Ok",
                                     type: "danger"
                                 })
@@ -276,6 +281,26 @@ class Lectures extends Component {
 
         })        
     }
+
+    setModalVisible(visible, id) {
+        this.setState({modalVisible: visible});
+        // return axios.get(Server.url+'api/terms')
+        // .then(response => {
+        //     this.setState({
+        //         isTerms: false,
+        //         termsAndCond: response.data
+        //     });
+        // }).catch(error => {
+        //     this.setState({
+        //         isTerms: false,
+        //     });
+        //     Toast.show({
+        //         text: "Error reaching the server.",
+        //         buttonText: "Ok",
+        //         type: "danger"
+        //     })
+        // })
+      }
     
     render() {
         var timeStart = new Date("01/01/2007 " + this.state.lecture.start_duration).getHours()
@@ -327,7 +352,7 @@ class Lectures extends Component {
                                     <ActivityIndicator size="small" color="#000000" />
                                 )}
         
-                                <Icon name="ios-checkmark" style={{color: Color.mainColor, fontSize: 30}}/>
+                                <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
         
                                 </Button>
 
@@ -341,7 +366,7 @@ class Lectures extends Component {
                                     <ActivityIndicator size="small" color="#000000" />
                                 )}
         
-                                <Icon name="ios-checkmark" style={{color: Color.mainColor, fontSize: 30}}/>
+                                <Icon type="Entypo" name="circle-with-plus" style={{color: Color.mainColor, fontSize: 25}}/>
         
                                 </Button>
 
@@ -403,11 +428,11 @@ class Lectures extends Component {
                         </Item>
 
                         <Item style={styles.item2}>
-                            <Icon type="FontAwesome" name="dollar" />
+                            <Icon type="FontAwesome" name="money" />
                             <H3 style={styles.lectureTxt}>Cost</H3>
                             <Button transparent style={styles.price2}>
                                 <Text style={styles.priceText}>{this.state.lecture.price}</Text>
-                                <Text style={styles.priceIcon}>$</Text>
+                                <Text style={styles.priceIcon}>KWD</Text>
                             </Button>
                             
                         </Item>
@@ -526,6 +551,36 @@ class Lectures extends Component {
                                 {
                                     this.createRating(item.rate)
                                 }
+                                {
+                                    (this.props.user.id == item.user_id)?(
+                                        <View>
+                                        <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id); }}>
+                                            <Icon type="FontAwesome" name ="edit" style={{color: '#000', paddingLeft:5}} />
+                                        </TouchableHighlight>
+                                        <Modal
+                                        animationType="slide"
+                                        transparent={false}
+                                        visible={this.state.modalVisible}
+                                        onRequestClose={() => {
+                                            alert('Modal has been closed.');
+                                        }}>
+                                        <View style={{marginTop: 22,padding:10}}>
+                                            <View>
+                                            <TouchableHighlight
+                                                onPress={() => {
+                                                this.setModalVisible(!this.state.modalVisible);
+                                                }}>
+                                                <Icon style={{alignSelf:'flex-end',marginBottom:8,marginRight:15}} type="Ionicons" name='md-close' />
+                                            </TouchableHighlight>
+                                            <Text>{this.state.comment}</Text>
+                                            
+                                            </View>
+                                        </View>
+                                        </Modal>
+                                        </View>
+                
+                                    ):null
+                                }
                             </Right> 
                         </CardItem>
                         <CardItem style={{}}>
@@ -553,10 +608,7 @@ class Lectures extends Component {
                                         </Text>
                                 </CardItem>
                                 <CardItem style={{marginBottom: 10}}>
-                                <Textarea
-                                    style={{height: 80, paddingTop: 0, marginTop: 0, flex: 1}}
-                                    rowSpan={3}
-                                    bordered
+                                <Input
                                     onChangeText={(comment) => this.setState({comment})}
                                     placeholder="Write your comment"
                                     placeholderTextColor="#ccc5c5"
@@ -652,7 +704,7 @@ const styles = StyleSheet.create({
     },
     price2:{
         position: 'absolute',
-        left: 200,
+        left: 180,
         top: 15
     },
     priceText:{

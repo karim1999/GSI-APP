@@ -63,7 +63,7 @@ export default class SignUp extends Component {
                         </Item>
 
                         <Item style={styles.margin}>
-                            <Input secureTextEntry={true} placeholder="Password" placeholderTextColor= "#d9cdb7" style={styles.input}
+                            <Input secureTextEntry={true} placeholder="Password (min 6 characters)" placeholderTextColor= "#d9cdb7" style={styles.input}
                                 onChangeText={(val) => this.setState({password: val})}/>
                         </Item>
 
@@ -72,6 +72,7 @@ export default class SignUp extends Component {
                                 textStyle={{color: '#fff'}}	
                                 ref={(ref) => { this.phone = ref; }}
                                 onChangePhoneNumber={(val) => this.setState({phone: val})}
+                                initialCountry='kw'
                             />
                         </View>
 

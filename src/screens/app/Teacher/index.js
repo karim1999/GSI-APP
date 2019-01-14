@@ -7,6 +7,7 @@ import {setUser} from "../../../reducers";
 import {connect} from "react-redux";
 import axios from "axios";
 import Server from "../../../constants/config";
+import moment from 'moment'
 
 class Teacher extends Component {
     constructor(props){
@@ -52,7 +53,7 @@ class Teacher extends Component {
                                 <View>
                                     <Text style={styles.txt}>Title: {item.title}</Text>
                                     <Text style={styles.txt}>Date: {item.start_date}</Text>
-                                    <Text style={styles.txt}>Duration: {item.start_time}</Text>
+                                    <Text style={styles.txt}>Time: {item.start_time}</Text>
                                 </View>
                             </Item>
                     )}

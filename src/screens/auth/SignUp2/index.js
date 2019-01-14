@@ -17,15 +17,16 @@ export default class SignUp2 extends Component {
     }
 
     onRegisterPressed(){
-        if(/^[0-9a-zA-Z]+$/.test(this.state.register.name) && /^[0-9a-zA-Z]+$/.test(this.state.register.middleName) &&
-        /^[0-9a-zA-Z]+$/.test(this.state.register.lastName)){
-            let text= 'Name must be in arabic and no numbers';
-            Toast.show({
-                text,
-                type: 'danger',
-                buttonText: 'Okay'
-            });
-        }else if(this.state.civilIDNumber.length != 12){
+        // if(/^[0-9a-zA-Z]+$/.test(this.state.register.name) && /^[0-9a-zA-Z]+$/.test(this.state.register.middleName) &&
+        // /^[0-9a-zA-Z]+$/.test(this.state.register.lastName)){
+        //     let text= 'Name must be in arabic and no numbers';
+        //     Toast.show({
+        //         text,
+        //         type: 'danger',
+        //         buttonText: 'Okay'
+        //     });
+        // }
+        if(this.state.civilIDNumber.length != 12){
             let text= 'civil id number should be 12 numbers';
             Toast.show({
                 text,

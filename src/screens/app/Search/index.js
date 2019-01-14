@@ -49,8 +49,7 @@ export default class Search extends Component {
         this.setState({
             isLoading: true
         })
-        return AsyncStorage.getItem('token').then(userToken => {
-            return axios.get(Server.url + 'api/lectures?token='+userToken)
+            return axios.get(Server.url + 'api/lectures?token=')
             .then(response => {
                 this.setState({
                     isLoading: false,
@@ -62,10 +61,8 @@ export default class Search extends Component {
                     buttonText: "Ok",
                     type: "danger"
                 })
-            })
-        })
+            });
 
-        alert( moment(this.state.start_duration).format('YYYY-MM-DD h:mm a') )
     }
 
       async Data(){
@@ -95,7 +92,6 @@ export default class Search extends Component {
             searchLectures: data
         })
            
-        alert(JSON.stringify(this.state.searchLectures))
       }
     
     render() {
@@ -162,18 +158,19 @@ export default class Search extends Component {
                         <FlatList
                         data={this.state.searchLectures}
                         renderItem={({item}) => (
-                            <TouchableOpacity style={styles.Box1}>
-                                <Item style={styles.item}>
+                            <View style={styles.Box1}>
+                                <Item style={styles.item}  onPress={()=>this.props.navigation.navigate('LectureStudent', {...item})}>
                                     <View style={styles.viewImage}>
                                         <Image source={require('../../../images/idea.png')} style={styles.image}/>
                                     </View>
                                     <View>
                                         <Text style={styles.txt}>{item.title}</Text>
                                         <Text style={styles.txt}>{item.user.name}</Text>
-                                        <Text style={styles.txt}>{item.start_duration}</Text>
+                                        <Text style={styles.txt}>{item.start_date}</Text>
+                                        <Text style={styles.txt}>{item.start_time}</Text>
                                     </View>
                                 </Item>
-                            </TouchableOpacity>
+                            </View>
                         )}
                         keyExtractor = { (item, index) => index.toString() }
                         />

@@ -16,6 +16,8 @@ class SettingsTeacher extends Component {
             middleName: this.props.user.middleName,
             lastName: this.props.user.lastName,
             email: this.props.user.email,
+            phone: this.props.user.phone,
+            civilIDNumber: this.props.user.civilIDNumber,
             gender: this.props.user.gender,
             oldPassword: "",
             newpassword: "",
@@ -34,6 +36,8 @@ class SettingsTeacher extends Component {
             data.append('middleName', this.state.middleName);
             data.append('lastName', this.state.lastName);
             data.append('email', this.state.email);
+            data.append('phone', this.state.phone);
+            data.append('civilIDNumber', this.state.civilIDNumber);
             data.append('gender', this.state.gender);
             return axios.post(Server.url + 'api/auth/updateprofile?token='+userToken, data).then(response => {
                 this.setState({
@@ -119,25 +123,25 @@ class SettingsTeacher extends Component {
                         </Item>
 
                         <Item style={{height: 70}}>
-                            <Icon type="MaterialIcons" name='subject' style={{fontSize:22}} />
+                            <Icon type="SimpleLineIcons" name='tag' style={{fontSize:17}} />
                             <Text style={styles.font}>Middle name </Text>
                             <Input onChangeText={(middleName) => this.setState({middleName})}
                                    value={this.state.middleName}
-                                   style={{color: '#9e9797', paddingLeft: 25}}
+                                   style={{color: '#9e9797', paddingLeft: 30}}
                             />
                         </Item>
 
                         <Item style={{height: 70}}>
-                            <Icon type="FontAwesome" name='dollar' />
+                            <Icon type="SimpleLineIcons" name='tag' style={{fontSize:17}}/>
                             <Text style={styles.font}>Last name </Text>
                             <Input onChangeText={(lastName) => this.setState({lastName})}
                                     value={this.state.lastName}
-                                    style={{color: '#9e9797', paddingLeft: 55}}
+                                    style={{color: '#9e9797', paddingLeft: 50}}
                             />
                         </Item>
 
                         <Item style={{height: 70}}>
-                            <Icon type="FontAwesome" name='dollar' />
+                            <Icon type="Entypo" name='mail' />
                             <Text style={styles.font}>Email </Text>
                             <Input onChangeText={(email) => this.setState({email})}
                                     value={this.state.email}
@@ -145,6 +149,23 @@ class SettingsTeacher extends Component {
                             />
                         </Item>
 
+                        <Item style={{height: 70}}>
+                            <Icon type="FontAwesome" name='mobile-phone' />
+                            <Text style={styles.font}>Phone </Text>
+                            <Input onChangeText={(phone) => this.setState({phone})}
+                                    value={this.state.phone}
+                                    style={{color: '#9e9797', paddingLeft: 70}}
+                            />
+                        </Item>
+
+                        <Item style={{height: 70}}>
+                            <Icon type="AntDesign" name='idcard' />
+                            <Text style={styles.font}>Civil id number </Text>
+                            <Input onChangeText={(civilIDNumber) => this.setState({civilIDNumber})}
+                                    value={this.state.civilIDNumber}
+                                    style={{color: '#9e9797', paddingLeft: 15}}
+                            />
+                        </Item>
 
                         <Item style={{height: 70}}>
                             <Icon type="FontAwesome" name="transgender" />

@@ -78,9 +78,6 @@ export default class LecturePayment extends Component {
                 </View>
 
                 <FlatList
-                    ListEmptyComponent={
-                        <Text style={{ fontSize: 20, fontFamily: "Roboto", padding:5, flex: 1, textAlign: "center"}}>No one joint ur lectures</Text>
-                    }
                     data={this.state.searchLectures}
                     renderItem={({item}) => (
 
@@ -102,7 +99,7 @@ export default class LecturePayment extends Component {
                                 <H3 style={styles.font}>Paid</H3>
                                 </Body>
                                 <Right>
-                                    <Label style={styles.font}>{item.pivot.amount}$</Label>
+                                    <Label style={styles.font}>{item.pivot.amount} KWD</Label>
                                 </Right>
                             </ListItem>
                             <ListItem style={styles.list}>
@@ -116,7 +113,7 @@ export default class LecturePayment extends Component {
                                             <Label style={styles.font}>None</Label>
                                         ):
                                         (
-                                            <Label style={styles.font}>{this.state.price - item.pivot.amount}$</Label>
+                                            <Label style={styles.font}>{this.state.price - item.pivot.amount} KWD</Label>
                                         )
                                     }
                                 </Right>
