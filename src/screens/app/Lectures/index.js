@@ -410,7 +410,7 @@ class Lectures extends Component {
                     <View style={styles.Box}>
 
                         <Item style={styles.item}>
-                            <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                            <Image source={{uri: this.state.lecture.img}} style={styles.image}/>
                             <View style={styles.text}>
                             {/* <Button onPress={()=> this.onRegisterPressed()}>
                                 <Text>register</Text>
@@ -544,7 +544,7 @@ class Lectures extends Component {
                         <View>
                         <CardItem style={{}}>
                             <Left>
-                            <Thumbnail source={require('../../../images/Background.png')} />
+                            <Thumbnail source={{uri: item.user.img}} />
                             <Text style={{paddingLeft: 10, fontSize: 19, fontFamily: "Roboto",}}>{item.user.name}</Text>
                             </Left>
                             <Right style={styles.allStarsComment}>

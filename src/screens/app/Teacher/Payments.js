@@ -89,7 +89,7 @@ class Payments extends Component {
 
                                     <Item style={styles.item}>
                                         <View style={styles.viewImage}>
-                                            <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                                            <Image source={{uri: item.img}} style={styles.image}/>
                                         </View>
                                         <View>
                                         <Item style={{ backgroundColor: '#fff', borderColor: 'transparent', paddingBottom: 10 }}>

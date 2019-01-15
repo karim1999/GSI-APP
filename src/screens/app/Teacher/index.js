@@ -48,7 +48,7 @@ class Teacher extends Component {
                         
                             <Item style={styles.item} onPress={()=>this.props.navigation.navigate('Lectures', {...item})}>
                                 <View style={styles.viewImage}>
-                                    <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                                    <Image source={{uri: item.img}} style={styles.image}/>
                                 </View>
                                 <View>
                                     <Text style={styles.txt}>Title: {item.title}</Text>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator} from 'react-native';
+import { StyleSheet, View, Image, AsyncStorage, FlatList, ActivityIndicator, TouchableOpacity} from 'react-native';
 import {Container, Text, Button, Icon, Toast, Thumbnail, ListItem, Left, Body,Item, H3} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Server from "../../../constants/config";
@@ -8,6 +8,8 @@ import {setUser} from "../../../reducers";
 import axios from "axios";
 import Color from "../../../constants/colors";
 import _ from "lodash";
+import firebase from 'react-native-firebase';
+import ImagePicker from "react-native-image-picker";
 
 class ProfileInfoTeacher extends Component {
     constructor(props) {
@@ -16,7 +18,70 @@ class ProfileInfoTeacher extends Component {
             // isLoading: true,
             // profile:this.props.navigation.state.params,
             // profileData: [],
+            img: this.props.user.img
         };
+    }
+
+    changeImg(){
+        let options = {
+            title: "Avatar",
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                this.setState({
+                    img: response.uri
+                });
+                firebase.storage()
+                .ref('/UserImage/'+'_' + Math.random().toString(36).substr(2, 9))
+                .putFile(this.state.img)
+                .then(snapshot => {
+                    firebase.storage().ref('/UserImage').getDownloadURL().then(url => {
+                        AsyncStorage.getItem('token').then(userToken => {
+                            axios.post(Server.url+'api/user/img?token='+userToken, 
+                            { img: url }
+                            ).then((response) => {
+                                Toast.show({
+                                    text: "successfully upload",
+                                    buttonText: "OK",
+                                    type: "success"
+                                })
+                                this.props.setUser(response.data);
+                            }).catch((err) => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Unknown error has occurred",
+                                    buttonText: "OK",
+                                    type: "danger"
+                                })
+                            })
+                        });
+                    })
+                }).catch(error => {
+                    Toast.show({
+                        text: "Unknown error has occurred",
+                        buttonText: "OK",
+                        type: "danger"
+                    })
+                })
+            }
+        });
     }
 
     // componentDidMount(){
@@ -55,7 +120,8 @@ class ProfileInfoTeacher extends Component {
         return (
             <AppTemplate back navigation={this.props.navigation} title="Profile info">
                         <View style={{ backgroundColor: "#f5f5f5", padding: 15, paddingLeft: 10, paddingRight: 10, paddingTop: 120}}>
-                            <Image source={require('../../../images/bg.jpg')} style={styles.image}/>
+                                <Image source={require('../../../images/bg.jpg')} style={styles.image}/>
+
                             <View style={{flex: 1, backgroundColor: "white", paddingTop: 120}}>
                                 <View style={styles.trainer}>
                                     <Text style={styles.trainerH3}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>

@@ -25,6 +25,7 @@ import MultiSelect from 'react-native-multiple-select';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment'
 import Color from '../../../constants/colors';
+import firebase from 'react-native-firebase';
 
 export default class EditLecture extends Component {
     constructor(props) {
@@ -42,6 +43,7 @@ export default class EditLecture extends Component {
             end_date: this.props.navigation.state.params.end_date,
             start_time: this.props.navigation.state.params.start_time,
             end_time: this.props.navigation.state.params.end_time,
+            img: this.props.navigation.state.params.img,            
             isStartDateVisible: false,
             isEndDateVisible: false,
             isStartTimeVisible: false,
@@ -126,49 +128,51 @@ export default class EditLecture extends Component {
         this.setState({
             isLoading: true
         });
-        return AsyncStorage.getItem('token').then(userToken => {
-            let data = new FormData();
-            start_duration = this.state.start_date+" "+this.state.start_time;
-            end_duration = this.state.end_date+" "+this.state.end_time;
-            data.append('title', this.state.title);
-            data.append('price', this.state.price);
-            data.append('end_date', this.state.end_date);
-            data.append('start_duration', start_duration);
-            data.append('end_duration', end_duration);
-            data.append('payment', this.state.payment);
-            data.append('type_course', this.state.type_course);
-            data.append('gender', this.state.gender);
-            data.append('allowed', this.state.allowed);
-            data.append('description', this.state.description);
-            data.append('start_date', this.state.start_date);
-            data.append('end_date', this.state.end_date);
-            data.append('start_time', this.state.start_time);
-            data.append('end_time', this.state.end_time);
-            if (this.state.img) {
-                data.append('img', {
-                    name: "img",
-                    uri: this.state.img,
-                    type: 'image/png'
+        firebase.storage()
+        .ref('/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9))
+        .putFile(this.state.img)
+        .then(snapshot => {
+            firebase.storage().ref('/LectureImage').getDownloadURL().then(url => {
+                AsyncStorage.getItem('token').then(userToken => {
+                    let data = new FormData();
+                    start_duration = this.state.start_date+" "+this.state.start_time;
+                    end_duration = this.state.end_date+" "+this.state.end_time;
+                    data.append('title', this.state.title);
+                    data.append('price', this.state.price);
+                    data.append('end_date', this.state.end_date);
+                    data.append('start_duration', start_duration);
+                    data.append('end_duration', end_duration);
+                    data.append('payment', this.state.payment);
+                    data.append('type_course', this.state.type_course);
+                    data.append('gender', this.state.gender);
+                    data.append('allowed', this.state.allowed);
+                    data.append('description', this.state.description);
+                    data.append('start_date', this.state.start_date);
+                    data.append('end_date', this.state.end_date);
+                    data.append('start_time', this.state.start_time);
+                    data.append('end_time', this.state.end_time);
+                    data.append('img', url);
+                    return axios.post(Server.url + 'api/editLecture/'+id+'?token='+userToken, data).then(response => {
+                        this.setState({
+                            isLoading: false,
+                        });
+                        Toast.show({
+                            text: "A lecture was edited successfully",
+                            buttonText: "Ok",
+                            type: "success"
+                        });
+                        this.props.setUser(response.data);
+                        this.props.navigation.navigate("Teacher");
+                    }).catch(error => {
+                    })
+                }).then(() => {
+                    this.setState({
+                        isLoading: false
+                    });
                 });
-            }
-            return axios.post(Server.url + 'api/editLecture/'+id+'?token='+userToken, data).then(response => {
-                this.setState({
-                    isLoading: false,
-                });
-                Toast.show({
-                    text: "A lecture was edited successfully",
-                    buttonText: "Ok",
-                    type: "success"
-                });
-                this.props.setUser(response.data);
-                this.props.navigation.navigate("Teacher");
-            }).catch(error => {
             })
-        }).then(() => {
-            this.setState({
-                isLoading: false
-            });
         });
+        
     }
 
     componentDidMount(){

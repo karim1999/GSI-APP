@@ -26,6 +26,7 @@ import MultiSelect from 'react-native-multiple-select';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import moment from 'moment'
 import Color from '../../../constants/colors';
+import firebase from 'react-native-firebase';
 
 export default class AddLecture extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ export default class AddLecture extends Component {
             img: "",
             description: "",
             start_date: moment(new Date).format('YYYY-MM-DD'),
-            end_date: moment(new Date).format('YYYY-MM-DD'),
+            end_date: moment(new Date).add(1, 'days').format('YYYY-MM-DD'),
             start_time: " Start Time",
             end_time: " End Time",
             selectedHours: 0,
@@ -218,7 +219,7 @@ export default class AddLecture extends Component {
         });
             if(this.state.title == "" || this.state.type_course == "" || 
             this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" || 
-            this.state.end_date == "" || this.state.start_time == "" || this.state.end_time == ""){
+            this.state.end_date == "" || this.state.start_time == "Start Time" || this.state.end_time == " End Time"){
                 Toast.show({
                     text: 'please fill out fields.',
                     type: "danger",
@@ -228,106 +229,123 @@ export default class AddLecture extends Component {
                     isLoading: false
                 });
             }else{
+                firebase.storage()
+                .ref('/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9))
+                .putFile(this.state.img)
+                .then(snapshot => {
+                    firebase.storage().ref('/LectureImage').getDownloadURL().then(url => {
+
+                    AsyncStorage.getItem('token').then(userToken => {
+                        let data = new FormData();
+                        start_duration = this.state.start_date+" "+this.state.start_time;
+                        end_duration = this.state.end_date+" "+this.state.end_time;
+                        // duration_date = start_duration.split(" ")[0];
+                        data.append('title', this.state.title);
+                        data.append('payment', this.state.payment);
+                        data.append('type_course', this.state.type_course);
+                        data.append('gender', this.state.gender);
+                        data.append('price', this.state.price);
+                        data.append('allowed', this.state.allowed);
+                        data.append('description', this.state.description);
+                        data.append('start_duration', start_duration);
+                        data.append('end_duration', end_duration);
+                        data.append('start_date', this.state.start_date);
+                        data.append('end_date', this.state.end_date);
+                        data.append('start_time', this.state.start_time);
+                        data.append('end_time', this.state.end_time);
+                        data.append('img', url);
+                        // if(timeStart>timeEnd){
+                        //     if (this.state.price) {
+                        //         data.append('price', this.state.price * (timeStart - timeEnd ));
+                        //     }else{
+                        //         data.append('price', (timeStart - timeEnd ) * 10);
+                        //     }                        
+                        // }else{
+                        //     if (this.state.price) {
+                        //         data.append('price', this.state.price * (timeEnd - timeStart ));
+                        //     }else{
+                        //         data.append('price', (timeEnd - timeStart ) * 10);
+                        //     }
+                        // }
+    
+                        // if (this.state.img) {
+                        //     data.append('img', {
+                        //         name: "img",
+                        //         uri: this.state.img,
+                        //         type: 'image/png'
+                        //     });
+                        // }
+    
+                        if(this.state.tableData == []){
+                            return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "A Lecture was added successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                });
+                                this.props.navigation.navigate("Teacher");
+                                this.props.setUser(response.data);
+                            }).catch(error => {
+                                Toast.show({
+                                    text: "Check your connection",
+                                    buttonText: "Ok",
+                                    type: "danger"
+                                });
+                                this.setState({
+                                    isLoading: false,
+                                });
+                            })
+                            
+                        }else{
+                            return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "A Lecture was added successfully",
+                                    buttonText: "Ok",
+                                    type: "success"
+                                });
+                                this.props.navigation.navigate("Teacher", {isLoading: true});
+                                for(var i=0; i<this.state.tableData.length; i++ ){
+                                    axios.post(Server.url + 'api/jointlectureusers/'+response.data.id+'/'+ this.state.tableData[i])
+                                    .then(response => {
+                                    }).catch(error => {
+                                        alert(JSON.stringify(error))
+                                    })
+                                }
+                            }).catch(error => {
+                                alert(JSON.stringify(data));
+                                this.setState({
+                                    isLoading: false,
+                                });
+                            })
+                        }
+    
+                    }).then(() => {
+                        this.setState({
+                            isLoading: false
+                        });
+                    }).catch(error=>{
+                        this.setState({
+                            isLoading: false,
+                        });
+                    })
+                    })
+
+                }).catch(error => {
+                    Toast.show({
+                        text: "Unknown error has occurred",
+                        buttonText: "OK",
+                        type: "danger"
+                    })
+                })
             // var timeStart = new Date("01/01/2007 " + this.state.start_duration).getHours() + (new Date("01/01/2007 " + this.state.start_duration).getMinutes()/60);
             // var timeEnd = new Date("01/01/2007 " + this.state.end_duration).getHours()+ (new Date("01/01/2007 " + this.state.end_duration).getMinutes()/60);
-                return AsyncStorage.getItem('token').then(userToken => {
-                    let data = new FormData();
-                    start_duration = this.state.start_date+" "+this.state.start_time;
-                    end_duration = this.state.end_date+" "+this.state.end_time;
-                    // duration_date = start_duration.split(" ")[0];
-                    data.append('title', this.state.title);
-                    data.append('payment', this.state.payment);
-                    data.append('type_course', this.state.type_course);
-                    data.append('gender', this.state.gender);
-                    data.append('price', this.state.price);
-                    data.append('allowed', this.state.allowed);
-                    data.append('description', this.state.description);
-                    data.append('start_duration', start_duration);
-                    data.append('end_duration', end_duration);
-                    data.append('start_date', this.state.start_date);
-                    data.append('end_date', this.state.end_date);
-                    data.append('start_time', this.state.start_time);
-                    data.append('end_time', this.state.end_time);
-                    // if(timeStart>timeEnd){
-                    //     if (this.state.price) {
-                    //         data.append('price', this.state.price * (timeStart - timeEnd ));
-                    //     }else{
-                    //         data.append('price', (timeStart - timeEnd ) * 10);
-                    //     }                        
-                    // }else{
-                    //     if (this.state.price) {
-                    //         data.append('price', this.state.price * (timeEnd - timeStart ));
-                    //     }else{
-                    //         data.append('price', (timeEnd - timeStart ) * 10);
-                    //     }
-                    // }
-
-                    if (this.state.img) {
-                        data.append('img', {
-                            name: "img",
-                            uri: this.state.img,
-                            type: 'image/png'
-                        });
-                    }
-
-                    if(this.state.tableData == []){
-                        return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
-                            this.setState({
-                                isLoading: false,
-                            });
-                            Toast.show({
-                                text: "A Lecture was added successfully",
-                                buttonText: "Ok",
-                                type: "success"
-                            });
-                            this.props.navigation.navigate("Teacher");
-                            this.props.setUser(response.data);
-                        }).catch(error => {
-                            Toast.show({
-                                text: "Check your connection",
-                                buttonText: "Ok",
-                                type: "danger"
-                            });
-                            this.setState({
-                                isLoading: false,
-                            });
-                        })
-                        
-                    }else{
-                        return axios.post(Server.url + 'api/addLecture?token='+userToken, data).then(response => {
-                            this.setState({
-                                isLoading: false,
-                            });
-                            Toast.show({
-                                text: "A Lecture was added successfully",
-                                buttonText: "Ok",
-                                type: "success"
-                            });
-                            this.props.navigation.navigate("Teacher", {isLoading: true});
-                            for(var i=0; i<this.state.tableData.length; i++ ){
-                                axios.post(Server.url + 'api/jointlectureusers/'+response.data.id+'/'+ this.state.tableData[i])
-                                .then(response => {
-                                }).catch(error => {
-                                    alert(JSON.stringify(error))
-                                })
-                            }
-                        }).catch(error => {
-                            alert(JSON.stringify(data));
-                            this.setState({
-                                isLoading: false,
-                            });
-                        })
-                    }
-
-                }).then(() => {
-                    this.setState({
-                        isLoading: false
-                    });
-                }).catch(error=>{
-                    this.setState({
-                        isLoading: false,
-                    });
-                })
+                
             }
     }
     

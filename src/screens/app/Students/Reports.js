@@ -121,7 +121,7 @@ class Reports extends Component {
 
                             <Item style={styles.item}>
                                 <View style={styles.viewImage}>
-                                    <Image source={require('../../../images/idea.png')} style={styles.image}/>
+                                    <Image source={{uri: item.img}} style={styles.image}/>
                                 </View>
                                 <View>
                                     <View style={{flexDirection: 'row', paddingBottom: 7}}>
