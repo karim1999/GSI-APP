@@ -562,53 +562,53 @@ class Lectures extends Component {
                                     this.createRating(item.rate)
                                 }
                                 {
-                                    (this.props.user.id == item.user_id)?(
-                                        <View>
-                                        <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id, item.comment); }}>
-                                            <Icon type="FontAwesome" name ="edit" style={{color: '#000', paddingLeft:5}} />
-                                        </TouchableHighlight>
-                                        <Modal
-                                        animationType="slide"
-                                        transparent={false}
-                                        visible={this.state.modalVisible}
-                                        onRequestClose={() => {
-                                            alert('Modal has been closed.');
-                                        }}>
-                                        <View style={{marginTop: 22,padding:10}}>
-                                            <View>
-                                            <TouchableHighlight
-                                                onPress={() => {
-                                                this.setModalVisible(!this.state.modalVisible);
-                                                }}>
-                                                <Icon style={{alignSelf:'flex-end',marginBottom:8,marginRight:15}} type="Ionicons" name='md-close' />
-                                            </TouchableHighlight>
-                                            <View>
-                                            <Input
-                                                onChangeText={(comments) => this.setState({comments})}
-                                                placeholder="Write your comment"
-                                                placeholderTextColor="#ccc5c5"
-                                                style={{borderColor: '#000', borderWidth: 1, color: '#000', flex:1, height:50}}
-                                            />
-                                            <Text>{this.state.comments}</Text>
-                                            <Button
-                                                onPress={() => this.editComment()}
-                                                style={{flexDirection: "row", backgroundColor: '#d3d3ea'}}
-                                                block light
-                                            >
-                                                <Text>Edit comment</Text>
-                                                {this.state.isEditComment && (
-                                                    <ActivityIndicator size="small" color="#000" />
-                                                )}
-                                                <Icon type="FontAwesome" name="comment" style={{color: Color.mainColor, fontSize: 20}}/>
-                                            </Button>
-                                            </View>
+                                    // (this.props.user.id == item.user_id)?(
+                                    //     <View>
+                                    //     <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id, item.comment); }}>
+                                    //         <Icon type="FontAwesome" name ="edit" style={{color: '#000', paddingLeft:5}} />
+                                    //     </TouchableHighlight>
+                                    //     <Modal
+                                    //     animationType="slide"
+                                    //     transparent={false}
+                                    //     visible={this.state.modalVisible}
+                                    //     onRequestClose={() => {
+                                    //         alert('Modal has been closed.');
+                                    //     }}>
+                                    //     <View style={{marginTop: 22,padding:10}}>
+                                    //         <View>
+                                    //         <TouchableHighlight
+                                    //             onPress={() => {
+                                    //             this.setModalVisible(!this.state.modalVisible);
+                                    //             }}>
+                                    //             <Icon style={{alignSelf:'flex-end',marginBottom:8,marginRight:15}} type="Ionicons" name='md-close' />
+                                    //         </TouchableHighlight>
+                                    //         <View>
+                                    //         <Input
+                                    //             onChangeText={(comments) => this.setState({comments})}
+                                    //             placeholder="Write your comment"
+                                    //             placeholderTextColor="#ccc5c5"
+                                    //             style={{borderColor: '#000', borderWidth: 1, color: '#000', flex:1, height:50}}
+                                    //         />
+                                    //         <Text>{this.state.comments}</Text>
+                                    //         <Button
+                                    //             onPress={() => this.editComment()}
+                                    //             style={{flexDirection: "row", backgroundColor: '#d3d3ea'}}
+                                    //             block light
+                                    //         >
+                                    //             <Text>Edit comment</Text>
+                                    //             {this.state.isEditComment && (
+                                    //                 <ActivityIndicator size="small" color="#000" />
+                                    //             )}
+                                    //             <Icon type="FontAwesome" name="comment" style={{color: Color.mainColor, fontSize: 20}}/>
+                                    //         </Button>
+                                    //         </View>
                                             
-                                            </View>
-                                        </View>
-                                        </Modal>
-                                        </View>
+                                    //         </View>
+                                    //     </View>
+                                    //     </Modal>
+                                    //     </View>
                 
-                                    ):null
+                                    // ):null
                                 }
                             </Right> 
                         </CardItem>
