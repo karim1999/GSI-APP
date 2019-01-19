@@ -21,7 +21,7 @@ class Teacher extends Component {
     render() {
         return (
             <AppTemplate fab navigation={this.props.navigation} title="Home">
-            
+
                 <Item style={styles.itemRobot}>
                     <View style={styles.viewImageRobot}>
                         <Image source={require('../../../images/cute-smiling-robot.png')} style={styles.imageRobot}/>
@@ -45,7 +45,7 @@ class Teacher extends Component {
                         }
                         data={this.props.user.lecture}
                         renderItem={({item}) => (
-                        
+
                             <Item style={styles.item} onPress={()=>this.props.navigation.navigate('Lectures', {...item})}>
                                 <View style={styles.viewImage}>
                                     <Image source={{uri: item.img}} style={styles.image}/>
@@ -59,7 +59,7 @@ class Teacher extends Component {
                     )}
                     keyExtractor = { (item, index) => index.toString() }
                     />
-                    </View>                    
+                    </View>
                 )
             }
 
@@ -70,30 +70,29 @@ class Teacher extends Component {
 
 const styles = StyleSheet.create({
     Box: {
-        flex:1,  
+        flex:1,
         backgroundColor: '#fff',
         borderRadius: 5,
         padding: 30,
         paddingTop: 0,
     },
     BoxComment: {
-        flex:1,  
+        flex:1,
         backgroundColor: '#fff',
         borderRadius: 5,
-        padding: 10, 
+        padding: 10,
         paddingTop: 20,
     },
     itemRobot:{
         padding: 10,
-        backgroundColor: '#fff', 
-        borderColor: 'transparent' 
+        backgroundColor: '#fff',
+        borderColor: 'transparent'
     },
     item:{
         paddingHorizontal: 5,
         paddingVertical: 15
     },
     title:{
-        fontFamily: "Open Sans",
         paddingVertical:10
     },
     viewImageRobot:{
@@ -103,19 +102,17 @@ const styles = StyleSheet.create({
         paddingRight: 50
     },
     imageRobot:{
-        width:140, 
-        height: 140,         
+        width:140,
+        height: 140,
     },
     image:{
-        width:80, 
-        height: 80, 
-        borderRadius: 10        
+        width:80,
+        height: 80,
+        borderRadius: 10
     },
     txt:{
-        fontFamily: "Open Sans",
     },
     txtTitle:{
-        fontFamily: "Open Sans",
         padding: 10
     }
 
