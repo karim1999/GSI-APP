@@ -54,12 +54,12 @@ class AppTemplate extends Component {
                         {
                             (this.props.back) ? (
                                 <Button transparent onPress={ () =>  this.props.navigation.goBack() } >
-                                    <Icon name='arrow-back' />
+                                    <Icon style={{color:'#fff'}} name='arrow-back' />
                                 </Button>
 
                             ):(
                                 <Button transparent onPress={ () =>  this.props.navigation.openDrawer() } >
-                                    <Icon name='menu' />
+                                    <Icon style={{color:'#fff'}} name='menu' />
                                 </Button>
                             )
                         }
@@ -74,7 +74,7 @@ class AppTemplate extends Component {
                     <TouchableOpacity>
                         {
                             (this.props.user.type == 1) ?(
-                                <Icon style={styles.butt} name='md-search' onPress={ () => this.props.navigation.navigate('Search')}/>                                
+                                <Icon style={styles.butt} name='md-search' onPress={ () => this.props.navigation.navigate('Search')}/>
                             ):null
                         }
                     </TouchableOpacity>
@@ -82,7 +82,7 @@ class AppTemplate extends Component {
                     </Right>
                 </Header>
                 {/* <Content style={styles.content}> */}
-                <Content 
+                <Content
                     refreshing={this.state.refreshing}
                     refreshControl={
                         <RefreshControl
@@ -99,7 +99,7 @@ class AppTemplate extends Component {
                             style={{ backgroundColor: Color.mainColor }}
                             position="bottomRight"
                             onPress={() => this.props.navigation.navigate('AddLecture')}>
-    
+
                             <Icon size={25} type="FontAwesome" name="edit" style={{color:'#FFFFFF'}}  />
                         </Fab>
                     )
