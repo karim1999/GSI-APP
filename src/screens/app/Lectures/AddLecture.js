@@ -42,7 +42,7 @@ export default class AddLecture extends Component {
             img: "",
             description: "",
             start_date: moment(new Date).format('YYYY-MM-DD'),
-            end_date: moment(new Date).add(1, 'days').format('YYYY-MM-DD'),
+            end_date: moment(new Date).format('YYYY-MM-DD'),
             start_time: " Start Time",
             end_time: " End Time",
             selectedHours: 0,
@@ -77,6 +77,7 @@ export default class AddLecture extends Component {
         this.setState({
             isStartDateVisible: false,
             start_date: moment(date).format('YYYY-MM-DD'),
+            end_date: moment(date).format('YYYY-MM-DD')
             // start_duration: moment(date).format('YYYY-MM-DD h:mm a')
         })
     };
@@ -217,7 +218,7 @@ export default class AddLecture extends Component {
         this.setState({
             isLoading: true
         });
-            if(this.state.title == "" || this.state.type_course == "" || 
+            if(this.state.title == "" || this.state.type_course == "" || this.state.img == "" ||
             this.state.gender == "" || this.state.allowed == ""  || this.state.start_date == "" || 
             this.state.end_date == "" || this.state.start_time == "Start Time" || this.state.end_time == " End Time"){
                 Toast.show({
@@ -229,11 +230,12 @@ export default class AddLecture extends Component {
                     isLoading: false
                 });
             }else{
+                var c = '/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9);
                 firebase.storage()
-                .ref('/LectureImage/'+'_' + Math.random().toString(36).substr(2, 9))
+                .ref(c)
                 .putFile(this.state.img)
                 .then(snapshot => {
-                    firebase.storage().ref('/LectureImage').getDownloadURL().then(url => {
+                    firebase.storage().ref(c).getDownloadURL().then(url => {
 
                     AsyncStorage.getItem('token').then(userToken => {
                         let data = new FormData();

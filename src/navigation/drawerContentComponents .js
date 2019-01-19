@@ -27,8 +27,8 @@ class drawerContentComponents extends Component {
         <View style={styles.container}>
             <View style={styles.headerContainer}>
                 <View style={{flex: 1, width: 280, justifyContent: 'center', backgroundColor: '#c0bfb4'}} >
-                    <TouchableOpacity onPress={this.navigateToScreen('ProfileInfoStudent')}>
-                    <Image source={require('../images/bg.jpg')}
+                    <TouchableOpacity onPress={this.navigateToScreen('SettingsStudent')}>
+                    <Image source={{uri: this.props.user.img}}
                         style={{width: 45, height: 45, borderRadius: 30, position: 'absolute', right: 20 }} />
                         <Text style={styles.headerText}>{this.props.user.name} {this.props.user.middleName} {this.props.user.lastName}</Text>
                         <Text style={styles.headerText}>Student</Text>

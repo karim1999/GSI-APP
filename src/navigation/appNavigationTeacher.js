@@ -18,7 +18,6 @@ const TeacherStack = createStackNavigator({
     AddLecture,
     EditLecture,
     Lectures,
-    ProfileInfoTeacher
 },{
     headerMode: 'none',
 });

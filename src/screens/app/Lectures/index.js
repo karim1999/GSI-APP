@@ -28,7 +28,9 @@ class Lectures extends Component {
             url: Server.url+'/privacy',
             modalVisible: false,
             id: '',
-            comments: ''
+            comments: '',
+            isEditComment: false,
+            comment: ''
 
         };
         this.setDate = this.setDate.bind(this);
@@ -206,6 +208,10 @@ class Lectures extends Component {
 
     }
 
+    editComment(){
+
+    }
+
     onPayPressed()
     {
         Alert.alert(
@@ -282,8 +288,12 @@ class Lectures extends Component {
         })        
     }
 
-    setModalVisible(visible, id) {
-        this.setState({modalVisible: visible});
+    setModalVisible(visible, id, comment) {
+        this.setState({
+            modalVisible: visible,
+            comments: comment
+
+        });
         // return axios.get(Server.url+'api/terms')
         // .then(response => {
         //     this.setState({
@@ -554,7 +564,7 @@ class Lectures extends Component {
                                 {
                                     (this.props.user.id == item.user_id)?(
                                         <View>
-                                        <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id); }}>
+                                        <TouchableHighlight onPress={() => { this.setModalVisible(true,item.id, item.comment); }}>
                                             <Icon type="FontAwesome" name ="edit" style={{color: '#000', paddingLeft:5}} />
                                         </TouchableHighlight>
                                         <Modal
@@ -572,7 +582,26 @@ class Lectures extends Component {
                                                 }}>
                                                 <Icon style={{alignSelf:'flex-end',marginBottom:8,marginRight:15}} type="Ionicons" name='md-close' />
                                             </TouchableHighlight>
-                                            <Text>{this.state.comment}</Text>
+                                            <View>
+                                            <Input
+                                                onChangeText={(comments) => this.setState({comments})}
+                                                placeholder="Write your comment"
+                                                placeholderTextColor="#ccc5c5"
+                                                style={{borderColor: '#000', borderWidth: 1, color: '#000', flex:1, height:50}}
+                                            />
+                                            <Text>{this.state.comments}</Text>
+                                            <Button
+                                                onPress={() => this.editComment()}
+                                                style={{flexDirection: "row", backgroundColor: '#d3d3ea'}}
+                                                block light
+                                            >
+                                                <Text>Edit comment</Text>
+                                                {this.state.isEditComment && (
+                                                    <ActivityIndicator size="small" color="#000" />
+                                                )}
+                                                <Icon type="FontAwesome" name="comment" style={{color: Color.mainColor, fontSize: 20}}/>
+                                            </Button>
+                                            </View>
                                             
                                             </View>
                                         </View>

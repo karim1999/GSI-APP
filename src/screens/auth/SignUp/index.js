@@ -28,9 +28,10 @@ export default class SignUp extends Component {
                 buttonText: 'Okay'
             });
          }else{
+             var new_phone = this.state.phone.replace("+", "");
             this.props.navigation.navigate('SignUp2', {name:this.state.name, middleName: this.state.middleName, 
                 lastName: this.state.lastName, email: this.state.email, password: this.state.password,
-                phone: this.state.phone, type: this.state.type.type,})
+                phone: new_phone, type: this.state.type.type,})
          }
     }
     
