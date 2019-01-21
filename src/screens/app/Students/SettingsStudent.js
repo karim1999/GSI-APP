@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, View, AsyncStorage, ActivityIndicator,} from 'react-native';
+import {StyleSheet, View, AsyncStorage, ActivityIndicator, Image, TouchableOpacity} from 'react-native';
 import { Button, Item, Text, Input, Form, Icon, Toast, Radio,} from 'native-base';
 import AppTemplate from "../appTemplate";
 import Color from '../../../constants/colors';
@@ -7,6 +7,8 @@ import axios from "axios/index";
 import Server from "../../../constants/config";
 import {setUser} from "../../../reducers";
 import {connect} from "react-redux";
+import ImagePicker from "react-native-image-picker";
+import firebase from 'react-native-firebase';
 
 class SettingsStudent extends Component {
     constructor(props) {
@@ -23,6 +25,7 @@ class SettingsStudent extends Component {
             newpassword: "",
             isLoading: false,
             isLoadingPassword: false,
+            img: this.props.user.img            
         };
     }    
 
@@ -106,12 +109,73 @@ class SettingsStudent extends Component {
 
             }
       }
-    
+
+      changeImg(){
+        let options = {
+            title: "Avatar",
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            }
+        };
+        ImagePicker.showImagePicker(options, (response) => {
+            console.log('Response = ', response);
+
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            }
+            else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            }
+            else if (response.customButton) {
+                console.log('User tapped custom button: ', response.customButton);
+            }
+            else {
+                this.setState({
+                    isLoading: true,
+                    img: response.uri
+                });
+                var c = '/userImage/'+'_' + Math.random().toString(36).substr(2, 9);
+                firebase.storage()
+                .ref(c)
+                .putFile(this.state.img)
+                .then(snapshot => {
+                    firebase.storage().ref(c).getDownloadURL().then(url => {
+                        AsyncStorage.getItem('token').then(userToken => {
+                            let data = new FormData();
+                            data.append('img', url);
+                            return axios.post(Server.url+'api/user/img?token='+userToken, data).then((response) => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                this.props.setUser(response.data);
+                            }).catch((error) => {
+                                this.setState({
+                                    isLoading: false,
+                                });
+                                Toast.show({
+                                    text: "Unknown error has occurred",
+                                    buttonText: "OK",
+                                    type: "danger"
+                                })
+                            })
+                        })                            
+                    }) 
+                });
+            }
+        });
+    }
+
     render() {
         return (
             <AppTemplate title = "Settings" navigation={this.props.navigation}>
                 <View style={styles.content}>
                     <Form style={styles.container}>
+                        <TouchableOpacity
+                            onPress={() => this.changeImg()}
+                        >
+                            <Image source={{uri: this.state.img}} style={styles.image}/>
+                        </TouchableOpacity>
 
                         <Item style={{height: 70}}>
                             <Icon type="SimpleLineIcons" name='tag' style={{fontSize:17}} />
@@ -253,6 +317,14 @@ const styles = StyleSheet.create({
         padding:7,
     },
     contentDescription:{
+    },
+    image:{
+        alignItems:'center',
+        alignSelf: 'center',
+        paddingTop: 10,
+        width: 100, 
+        height: 100, 
+        borderRadius: 50        
     },
     input:{
         width: 200,

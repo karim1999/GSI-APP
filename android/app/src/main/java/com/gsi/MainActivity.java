@@ -1,4 +1,4 @@
-package com.gsi;
+package com.gsi.kw;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -1,4 +1,4 @@
-package com.gsi;
+package com.gsi.kw;
 
 import android.app.Application;
 

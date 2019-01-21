@@ -29,7 +29,7 @@ class Payments extends Component {
                 this.setState({
                     isLoading: false,
                     showLectAndUser: response.data,
-                    url: Server.url+'api/export?token='+userToken
+                    url: Server.url+'export?token='+userToken
                 })
             }).catch(error => {
                 Toast.show({
