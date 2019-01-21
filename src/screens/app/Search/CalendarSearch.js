@@ -117,7 +117,7 @@ export default class CalendarSearch extends Component {
                     <Right>
 
                     <TouchableOpacity>
-                            <Icon style={styles.butt} name='md-search' onPress={ () => this.props.navigation.navigate('Search')}/>
+                            <Icon style={styles.butt} name='md-search' onPress={ () => this.props.navigation.navigate('Search')}/>                         
                     </TouchableOpacity>
 
                     </Right>
@@ -136,7 +136,7 @@ export default class CalendarSearch extends Component {
                 // callback that gets called when day changes while scrolling agenda list
                 onDayChange={(day)=>{console.log('day changed')}}
                 // initially selected day
-                selected={moment(new Date).format('YYYY-MM-DD')} 
+                selected={moment(new Date).format('YYYY-MM-DD')}
                 // Max amount of months allowed to scroll to the past. Default = 50
                 pastScrollRange={50}
                 // Max amount of months allowed to scroll to the future. Default = 50
